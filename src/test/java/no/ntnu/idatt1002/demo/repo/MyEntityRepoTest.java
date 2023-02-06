@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MyEntityRepoTest {
 
+    //test
+
     @Test
     public void testThatWeCanReadMyEntityFromDatabase() {
         MyEntity e = new MyEntityRepo().getMyEntity("id");
