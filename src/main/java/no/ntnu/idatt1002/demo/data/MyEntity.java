@@ -8,6 +8,7 @@ import java.util.List;
  * @author nilstes
  */
 public class MyEntity {
+    private List<Type> budgets;
     private String id;
     private String name;
     
@@ -34,4 +35,5 @@ public class MyEntity {
     public void setId(String id) {
         this.id = id;
     }
+
 }
