@@ -3,6 +3,7 @@ package no.ntnu.idatt1002.demo;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
@@ -117,7 +118,7 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
 
         //overviewWindow- TableView for viewing expenses/income
-        /*TableView<String> expensesIncomeTableView = new TableView<>();
+        TableView<String> expensesIncomeTableView = new TableView<>();
 
         TableColumn<String, String> typeColumn = new TableColumn<>("Type");
 //        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
@@ -141,7 +142,7 @@ public class MyApp extends Application {
                 new String("Hobby 400"),
                 new String("Klær 300")
         );
-        expensesIncomeTableView.setItems(expensesIncomeData);*/
+        expensesIncomeTableView.setItems(expensesIncomeData);
 
         //overviewWindow- Text for top of overview page
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
@@ -157,7 +158,7 @@ public class MyApp extends Application {
 
         //overviewWindow- Pane for the bottom of the overview page
         VBox bottomOverviewPane = new VBox();
-        bottomOverviewPane.getChildren().addAll(underOverviewText);
+        bottomOverviewPane.getChildren().addAll(expensesIncomeTableView, underOverviewText);
 
         //overviewWindow- Separator to differentiate between the different charts
         Separator chartSeparator = new Separator();
@@ -191,6 +192,13 @@ public class MyApp extends Application {
         incomeSum.minWidth(200);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
+        addIncomeButton.setStyle(
+                "-fx-background-color: #ffffff; " +
+                "-fx-border-color: #116c75;" +
+                "-fx-text-fill: #116c75;" +
+                "-fx-pref-width: 150;" +
+                "-fx-highlight-fill: #116c75;" +
+                "-fx-alignment: center;");
 
         fieldBox.getChildren().addAll(incomeName, incomeSum, addIncomeButton);
         fieldBox.setAlignment(Pos.CENTER);
@@ -219,10 +227,38 @@ public class MyApp extends Application {
         Text helpText = new Text("""
                 Her kan du få hjelp til å bruke programmet.
 
-                Brukerinstruks:
-                - Steg 1:\s
-                - Steg 2:\s""");
+                Ofte stilte spørsmål::
+                \s
+                - Spørsmål 1: Hvem er dette laget for?\s
+                    - Svar 1: Programmet er laget for privat bruk, med mål om å holde styr på privatøkonomien!\s
+                    \s
+                - Spørsmål 2:\s""");
         helpWindow.setCenter(helpText);
+
+        VBox helpFeedbackBox = new VBox();
+        helpFeedbackBox.setAlignment(Pos.CENTER);
+        helpFeedbackBox.setPadding(new Insets(10, 10, 10, 10));
+        helpFeedbackBox.setSpacing(10);
+        TextField feedbackField = new TextField();
+        feedbackField.setPrefHeight(200);
+        feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? Skriv inn til oss her!");
+        Button feedbackButton = new Button("Send tilbakemelding");
+        feedbackButton.setStyle("-fx-font-size: 16;" +
+                "-fx-background-color: #ffffff; " +
+                "-fx-border-color: #116c75;" +
+                "-fx-background-radius: 5px;" +
+                "-fx-text-fill: #116c75;" +
+                "-fx-pref-width: 150;" +
+                "-fx-pref-height: 50;" +
+                "-fx-highlight-fill: #116c75;" +
+                "-fx-alignment: center;");
+        feedbackButton.setAlignment(Pos.CENTER);
+        feedbackButton.setMinWidth(250);
+        feedbackButton.autosize();
+        helpFeedbackBox.getChildren().addAll(feedbackField, feedbackButton);
+
+
+        helpWindow.setBottom(helpFeedbackBox);
         helpWindow.setVisible(false);
         windowPane.getChildren().addAll(helpWindow);
 
@@ -322,7 +358,7 @@ public class MyApp extends Application {
         root.setCenter(windowPane);
 
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1000, 800);
         stage.setTitle("Budsjettverktøy");
         stage.setScene(scene);
         stage.show();
