@@ -181,9 +181,10 @@ public class MyApp extends Application {
         BorderPane incomeWindowElements = new BorderPane();
 
         HBox fieldBox = new HBox();
+        fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
         incomeName.prefWidth(200);
-        incomeName.minWidth(200);
+        incomeName.minWidth(300);
         incomeName.setPromptText("Navn på inntekt (eks.: Lønn, Studielån)");
         TextField incomeSum = new TextField();
         incomeSum.prefWidth(200);
@@ -210,11 +211,20 @@ public class MyApp extends Application {
         windowPane.getChildren().addAll(incomeWindow);
 
         //Pane for help window
-        BorderPane helpPane = new BorderPane();
-        Text helpText = new Text("Du trenger ikke nå hjelp for å få det her til å funk, det går bra");
-        helpPane.setCenter(helpText);
-        helpPane.setVisible(false);
-        windowPane.getChildren().addAll(helpPane);
+        BorderPane helpWindow = new BorderPane();
+        helpWindow.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+        Text helpText = new Text("""
+                Her kan du få hjelp til å bruke programmet.
+
+                Brukerinstruks:
+                - Steg 1:\s
+                - Steg 2:\s""");
+        helpWindow.setCenter(helpText);
+        helpWindow.setVisible(false);
+        windowPane.getChildren().addAll(helpWindow);
 
 
         //VBox for navigation menu on the left side of the window
@@ -246,7 +256,7 @@ public class MyApp extends Application {
         overviewButton.setStyle(buttonStyle);
         overviewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Oversikt");
-            helpPane.setVisible(false);
+            helpWindow.setVisible(false);
             overviewWindow.setVisible(true);
             incomeWindow.setVisible(false);
         });
@@ -265,6 +275,7 @@ public class MyApp extends Application {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
             overviewWindow.setVisible(false);
+            helpWindow.setVisible(false);
         });
         incomeButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> incomeButton.setStyle(buttonHoverStyle));
         incomeButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> incomeButton.setStyle(buttonStyle));
@@ -291,7 +302,7 @@ public class MyApp extends Application {
         helpButton.setStyle(buttonStyle);
         helpButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Hjelp");
-            helpPane.setVisible(true);
+            helpWindow.setVisible(true);
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
         });
