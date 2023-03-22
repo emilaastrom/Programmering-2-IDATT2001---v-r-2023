@@ -241,7 +241,7 @@ public class MyApp extends Application {
         helpFeedbackBox.setSpacing(10);
         TextField feedbackField = new TextField();
         feedbackField.setPrefHeight(200);
-        feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? Skriv inn til oss her!");
+        feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
         Button feedbackButton = new Button("Send tilbakemelding");
         feedbackButton.setStyle("-fx-font-size: 16;" +
                 "-fx-background-color: #ffffff; " +
