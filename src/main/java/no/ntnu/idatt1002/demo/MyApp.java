@@ -3,10 +3,10 @@ package no.ntnu.idatt1002.demo;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -117,14 +117,14 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
 
         //overviewWindow- TableView for viewing expenses/income
-        TableView<String> expensesIncomeTableView = new TableView<>();
+        /*TableView<String> expensesIncomeTableView = new TableView<>();
 
         TableColumn<String, String> typeColumn = new TableColumn<>("Type");
-        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+//        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumn<String, String> nameColumn = new TableColumn<>("Navn");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+//        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         TableColumn<String, String> sumColumn = new TableColumn<>("Sum");
-        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
+//        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
 
         expensesIncomeTableView.getColumns().add(typeColumn);
         expensesIncomeTableView.getColumns().add(nameColumn);
@@ -141,7 +141,7 @@ public class MyApp extends Application {
                 new String("Hobby 400"),
                 new String("Klær 300")
         );
-        expensesIncomeTableView.setItems(expensesIncomeData);
+        expensesIncomeTableView.setItems(expensesIncomeData);*/
 
         //overviewWindow- Text for top of overview page
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
@@ -157,7 +157,7 @@ public class MyApp extends Application {
 
         //overviewWindow- Pane for the bottom of the overview page
         VBox bottomOverviewPane = new VBox();
-        bottomOverviewPane.getChildren().addAll(expensesIncomeTableView, underOverviewText);
+        bottomOverviewPane.getChildren().addAll(underOverviewText);
 
         //overviewWindow- Separator to differentiate between the different charts
         Separator chartSeparator = new Separator();
@@ -165,10 +165,49 @@ public class MyApp extends Application {
 
         graphsBox.getChildren().addAll(chart, chartSeparator, barChart);
         overviewWindow.setTop(overviewTitle);
-        overviewWindow.setCenter(graphsBox);
-        overviewWindow.setBottom(bottomOverviewPane);
+        overviewWindow.setCenter(bottomOverviewPane);
+        overviewWindow.setBottom(graphsBox);
         windowPane.getChildren().add(overviewWindow);
 
+        //Pane for income window
+        BorderPane incomeWindow = new BorderPane();
+        incomeWindow.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+
+
+        //Elements for income window
+        BorderPane incomeWindowElements = new BorderPane();
+
+        HBox fieldBox = new HBox();
+        TextField incomeName = new TextField();
+        incomeName.prefWidth(200);
+        incomeName.minWidth(200);
+        incomeName.setPromptText("Navn på inntekt (eks.: Lønn, Studielån)");
+        TextField incomeSum = new TextField();
+        incomeSum.prefWidth(200);
+        incomeSum.minWidth(200);
+        incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
+        Button addIncomeButton = new Button("Legg til inntekt");
+
+        fieldBox.getChildren().addAll(incomeName, incomeSum, addIncomeButton);
+        fieldBox.setAlignment(Pos.CENTER);
+
+        incomeWindowElements.setCenter(fieldBox);
+
+
+        HBox incomeTitleBox = new HBox();
+        Text incomeTitle = new Text("\nVelkommen til inntektsiden, her kan du legge til inntekter!\n");
+        incomeTitle.setStyle("-fx-alignment: center;" +
+                "-fx-font-size: 20;" +
+                "-fx-font-weight: bold;");
+        incomeTitleBox.getChildren().add(incomeTitle);
+        incomeTitleBox.setAlignment(Pos.CENTER);
+        incomeWindow.setTop(incomeTitleBox);
+        incomeWindow.setCenter(incomeWindowElements);
+        incomeWindow.setVisible(false);
+        windowPane.getChildren().addAll(incomeWindow);
 
         //Pane for help window
         BorderPane helpPane = new BorderPane();
@@ -209,6 +248,7 @@ public class MyApp extends Application {
             titleText.setText("Oversikt");
             helpPane.setVisible(false);
             overviewWindow.setVisible(true);
+            incomeWindow.setVisible(false);
         });
         overviewButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> overviewButton.setStyle(buttonHoverStyle));
         overviewButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> overviewButton.setStyle(buttonStyle));
@@ -221,7 +261,11 @@ public class MyApp extends Application {
 
         Button incomeButton = new Button("Inntekter");
         incomeButton.setStyle(buttonStyle);
-        incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Inntekter"));
+        incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            titleText.setText("Inntekter");
+            incomeWindow.setVisible(true);
+            overviewWindow.setVisible(false);
+        });
         incomeButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> incomeButton.setStyle(buttonHoverStyle));
         incomeButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> incomeButton.setStyle(buttonStyle));
 
@@ -249,6 +293,7 @@ public class MyApp extends Application {
             titleText.setText("Hjelp");
             helpPane.setVisible(true);
             overviewWindow.setVisible(false);
+            incomeWindow.setVisible(false);
         });
         helpButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> helpButton.setStyle(buttonHoverStyle));
         helpButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> helpButton.setStyle(buttonStyle));
