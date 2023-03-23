@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
@@ -12,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Type;
 
@@ -46,6 +48,10 @@ public class MyApp extends Application {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
 
+        String underTitleStyle = (
+                "-fx-font-size: 18;" +
+                "-fx-font-weight: bold;");
+
         //HBox for current page title
         HBox titleBox = new HBox();
         Text titleText = new Text();
@@ -76,9 +82,9 @@ public class MyApp extends Application {
         //overviewWindow- HBox to contain different graphs
         HBox graphsBox = new HBox();
         graphsBox.setStyle("-fx-background-color: #ffffff;" +
-                "-fx-border-color: #116c75;" +
-                "-fx-border-width: 1px;" +
-                "-fx-border-radius: 5px;" +
+//                "-fx-border-color: #116c75;" +
+//                "-fx-border-width: 1px;" +
+//                "-fx-border-radius: 5px;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 20px;" +
                 "-fx-alignment: center;" +
@@ -94,6 +100,7 @@ public class MyApp extends Application {
                         new PieChart.Data("Klær", 300));
         final PieChart chart = new PieChart(pieChartExpenses);
         chart.setTitle("Dine utgifter");
+        chart.setLegendVisible(false);
         /*chart.getData().addListener((javafx.collections.ListChangeListener.Change<? extends PieChart.Data> c) -> {
             while (c.next()) {
                 for (PieChart.Data data : c.getAddedSubList()) {
@@ -116,6 +123,13 @@ public class MyApp extends Application {
                 "-fx-padding: 10px;" +
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
+        barChart.setLegendVisible(false);
+
+        //Pane for tableViews
+        BorderPane tablePane = new BorderPane();
+        HBox tableHBox = new HBox();
+        tablePane.setTop(tableHBox);
+
 
         //overviewWindow- Data for the TableView (expenses/income)
         ObservableList<String> expensesData = FXCollections.observableArrayList(
@@ -132,7 +146,7 @@ public class MyApp extends Application {
         TableColumn<String, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
 //        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<String, String> sumColumn = new TableColumn<>("Sum");
+        TableColumn<String, String> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setMinWidth(250);
 //        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
 
@@ -160,7 +174,7 @@ public class MyApp extends Application {
         TableColumn<String, String> incomeNameColumn = new TableColumn<>("Navn");
         incomeNameColumn.setMinWidth(100);
 //        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<String, String> incomeSumColumn = new TableColumn<>("Sum");
+        TableColumn<String, String> incomeSumColumn = new TableColumn<>("Sum (inntekt)");
         incomeSumColumn.setMinWidth(250);
 //        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
 
@@ -174,10 +188,11 @@ public class MyApp extends Application {
         incomeTableView.setItems(incomeData);
 
         //overviewWindow- Text for top of overview page
+        HBox titleOverviewPane = new HBox();
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
-        overviewTitle.setStyle(
-                "-fx-font-size: 15;" +
-                "-fx-font-weight: bold;");
+        overviewTitle.setStyle(underTitleStyle);
+        titleOverviewPane.setAlignment(Pos.CENTER);
+        titleOverviewPane.getChildren().add(overviewTitle);
 
         //overviewWindow- Text for bottom of overview page
         Text underOverviewText = new Text("\nDersom du ønsker å legge til en utgift eller inntekt, bruk navigasjonsmenyen til venstre.\n");
@@ -189,7 +204,23 @@ public class MyApp extends Application {
         HBox topOverviewPane = new HBox();
         topOverviewPane.setSpacing(50);
         topOverviewPane.autosize();
-        topOverviewPane.getChildren().addAll(expensesTableView, incomeTableView);
+        topOverviewPane.setStyle("-fx-border-color: #ffffff;" +
+                "-fx-border-width: 1px;" +
+                "-fx-border-radius: 5px;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+        Separator graphSeparator = new Separator();
+        graphSeparator.setOrientation(Orientation.HORIZONTAL);
+        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
+        tableHBox.setSpacing(45);
+        tablePane.setTop(tableHBox);
+        tablePane.setBottom(graphSeparator);
+        graphSeparator.setPadding(new Insets(30, 0, 0, 0));
+        tablePane.setPadding(new Insets(10, 10, 10, 10));
+
+        topOverviewPane.getChildren().addAll(tablePane);
+
 
         VBox bottomOverviewPane = new VBox();
         bottomOverviewPane.getChildren().addAll(graphsBox, underOverviewText);
@@ -199,7 +230,7 @@ public class MyApp extends Application {
         chartSeparator.setOrientation(javafx.geometry.Orientation.VERTICAL);
 
         graphsBox.getChildren().addAll(chart, chartSeparator, barChart);
-        overviewWindow.setTop(overviewTitle);
+        overviewWindow.setTop(titleOverviewPane);
         overviewWindow.setCenter(topOverviewPane);
         overviewWindow.setBottom(bottomOverviewPane);
         windowPane.getChildren().addAll(overviewWindow);
@@ -240,9 +271,7 @@ public class MyApp extends Application {
 
         HBox incomeTitleBox = new HBox();
         Text incomeTitle = new Text("\nVelkommen til inntektsiden, her kan du legge til inntekter!\n");
-        incomeTitle.setStyle("-fx-alignment: center;" +
-                "-fx-font-size: 20;" +
-                "-fx-font-weight: bold;");
+        incomeTitle.setStyle(underTitleStyle);
         incomeTitleBox.getChildren().add(incomeTitle);
         incomeTitleBox.setAlignment(Pos.CENTER);
         incomeWindow.setTop(incomeTitleBox);
@@ -250,8 +279,49 @@ public class MyApp extends Application {
         incomeWindow.setVisible(false);
         windowPane.getChildren().addAll(incomeWindow);
 
-        //Pane for settings window
+        //settingsWindow -Pane for settings window
         BorderPane settingsWindow = new BorderPane();
+        settingsWindow.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+
+        //settingsWindow -Elements for settings window
+        VBox topElementsSettings = new VBox();
+        topElementsSettings.setAlignment(Pos.CENTER);
+
+        Text settingsTopText = new Text("\nVelkommen til innstillingsiden, her kan du endre på innstillinger!\n");
+        settingsTopText.setStyle(
+                "-fx-font-size: 20;" +
+                "-fx-font-weight: bold;");
+
+        topElementsSettings.getChildren().addAll(settingsTopText);
+
+        HBox settingsMiddleBox = new HBox();
+        settingsMiddleBox.setSpacing(50);
+        settingsMiddleBox.setAlignment(Pos.CENTER);
+        Button settingsOptionsTextOne = new Button("Ønsker du å endre navn på en bruker?");
+        settingsOptionsTextOne.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-border-color: #116c75;" +
+                "-fx-font-size: 15;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+
+        Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
+        settingsOptionsTextTwo.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-border-color: #116c75;" +
+                "-fx-font-size: 15;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+        settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
+
+        //settingsWindow - General settings
+        settingsWindow.setTop(topElementsSettings);
+        settingsWindow.setCenter(settingsMiddleBox);
+        settingsWindow.setVisible(false);
+        windowPane.getChildren().addAll(settingsWindow);
 
         //Pane for help window
         BorderPane helpWindow = new BorderPane();
@@ -259,15 +329,19 @@ public class MyApp extends Application {
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
+        VBox helpWindowTopBox = new VBox();
+        helpWindowTopBox.setAlignment(Pos.CENTER);
+        Text helpWindowTitle = new Text("Her kan du få hjelp til å bruke programmet.");
+        helpWindowTitle.setStyle(underTitleStyle);
+        helpWindowTopBox.getChildren().add(helpWindowTitle);
         Text helpText = new Text("""
-                Her kan du få hjelp til å bruke programmet.
-
                 Ofte stilte spørsmål::
                 \s
                 - Spørsmål 1: Hvem er dette laget for?\s
                     - Svar 1: Programmet er laget for privat bruk, med mål om å holde styr på privatøkonomien!\s
                     \s
                 - Spørsmål 2:\s""");
+        helpWindow.setTop(helpWindowTopBox);
         helpWindow.setCenter(helpText);
 
         VBox helpFeedbackBox = new VBox();
@@ -325,61 +399,129 @@ public class MyApp extends Application {
 
         //Buttons for navigating the application
         Button overviewButton = new Button("Oversikt");
+        Button accountButton = new Button("Konto");
+        Button incomeButton = new Button("Inntekter");
+        Button expensesButton = new Button("Utgifter");
+        Button savingsButton = new Button("Sparemål");
+        Button settingsButton = new Button("Innstillinger");
+        Button helpButton = new Button("Hjelp");
+
         overviewButton.setStyle(buttonStyle);
         overviewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            overviewButton.setStyle(buttonHoverStyle);
             titleText.setText("Oversikt");
             helpWindow.setVisible(false);
             overviewWindow.setVisible(true);
             incomeWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+
+            overviewButton.setStyle(buttonHoverStyle);
+            accountButton.setStyle(buttonStyle);
+            incomeButton.setStyle(buttonStyle);
+            expensesButton.setStyle(buttonStyle);
+            savingsButton.setStyle(buttonStyle);
+            settingsButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);
         });
         overviewButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> overviewButton.setStyle(buttonHoverStyle));
-        overviewButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> overviewButton.setStyle(buttonStyle));
+        overviewButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            if (!overviewWindow.isVisible()) {
+                overviewButton.setStyle(buttonStyle);
+            }
 
-        Button accountButton = new Button("Konto");
+        });
+
+        //Initializing to hoverstyle as default
+        overviewButton.setStyle(buttonHoverStyle);
+
         accountButton.setStyle(buttonStyle);
         accountButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Konto"));
         accountButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> accountButton.setStyle(buttonHoverStyle));
         accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));
 
-        Button incomeButton = new Button("Inntekter");
         incomeButton.setStyle(buttonStyle);
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
             overviewWindow.setVisible(false);
             helpWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+
+            overviewButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
+            incomeButton.setStyle(buttonHoverStyle);
+            expensesButton.setStyle(buttonStyle);
+            savingsButton.setStyle(buttonStyle);
+            settingsButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);
+
         });
         incomeButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> incomeButton.setStyle(buttonHoverStyle));
-        incomeButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> incomeButton.setStyle(buttonStyle));
+        incomeButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            if (!incomeWindow.isVisible()) {
+                incomeButton.setStyle(buttonStyle);
+            }
 
-        Button expensesButton = new Button("Utgifter");
+        });
+
         expensesButton.setStyle(buttonStyle);
         expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Utgifter"));
         expensesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> expensesButton.setStyle(buttonHoverStyle));
         expensesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> expensesButton.setStyle(buttonStyle));
 
-        Button savingsButton = new Button("Sparemål");
         savingsButton.setStyle(buttonStyle);
         savingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Sparemål"));
         savingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> savingsButton.setStyle(buttonHoverStyle));
         savingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> savingsButton.setStyle(buttonStyle));
 
-        Button settingsButton = new Button("Innstillinger");
         settingsButton.setStyle(buttonStyle);
-        settingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Innstillinger"));
-        settingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> settingsButton.setStyle(buttonHoverStyle));
-        settingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> settingsButton.setStyle(buttonStyle));
+        settingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            titleText.setText("Innstillinger");
+            overviewWindow.setVisible(false);
+            incomeWindow.setVisible(false);
+            helpWindow.setVisible(false);
+            settingsWindow.setVisible(true);
 
-        Button helpButton = new Button("Hjelp");
+            overviewButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
+            incomeButton.setStyle(buttonStyle);
+            expensesButton.setStyle(buttonStyle);
+            savingsButton.setStyle(buttonStyle);
+            settingsButton.setStyle(buttonHoverStyle);
+            helpButton.setStyle(buttonStyle);
+        });
+        settingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> settingsButton.setStyle(buttonHoverStyle));
+        settingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            if (!settingsWindow.isVisible()) {
+                settingsButton.setStyle(buttonStyle);
+            }
+
+        });
+
         helpButton.setStyle(buttonStyle);
         helpButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Hjelp");
             helpWindow.setVisible(true);
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+
+            overviewButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
+            incomeButton.setStyle(buttonStyle);
+            expensesButton.setStyle(buttonStyle);
+            savingsButton.setStyle(buttonStyle);
+            settingsButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonHoverStyle);
+
         });
         helpButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> helpButton.setStyle(buttonHoverStyle));
-        helpButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> helpButton.setStyle(buttonStyle));
+        helpButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            if (!helpWindow.isVisible()) {
+                helpButton.setStyle(buttonStyle);
+            }
+
+        });
 
         Button loggUtButton = new Button("Logg ut");
         loggUtButton.setStyle(buttonStyle);
@@ -388,8 +530,13 @@ public class MyApp extends Application {
         loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));
 
         addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            testType.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
             incomeSum.setText("");
             incomeName.setText("");
+            series.setData(FXCollections.observableArrayList());
+            series.getData().add(new XYChart.Data<>("Inntekter", testType.getTotalIncome()));
+            series.getData().add(new XYChart.Data<>("Utgifter", testType.getTotalExpense()));
+            barChart.getData().addAll(series);
         });
 
         navigationMenu.isFillWidth();
@@ -399,7 +546,7 @@ public class MyApp extends Application {
         root.setCenter(windowPane);
 
 
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, 1250, 1000);
         stage.setTitle("Budsjettverktøy");
         stage.setScene(scene);
         stage.show();
