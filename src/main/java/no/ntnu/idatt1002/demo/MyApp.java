@@ -15,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.Type;
 
 /**
@@ -44,6 +45,17 @@ public class MyApp extends Application {
         testType.addExpense("Bolig", 4500);
         testType.addIncome("Studielån", 8100);
         testType.addIncome("Deltidsjobb", 3000);
+
+        //Temprary test data V2
+        Budget userOneBudget = new Budget("Nils");
+        userOneBudget.addExpense("Mat", 3500);
+        userOneBudget.addExpense("Transport", 600);
+        userOneBudget.addExpense("Bolig", 5000);
+        userOneBudget.addIncome("Studielån", 8100);
+        userOneBudget.addIncome("Deltidsjobb", 3000);
+
+
+
 
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
@@ -124,6 +136,7 @@ public class MyApp extends Application {
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
         barChart.setLegendVisible(false);
+        barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
@@ -195,10 +208,13 @@ public class MyApp extends Application {
         titleOverviewPane.getChildren().add(overviewTitle);
 
         //overviewWindow- Text for bottom of overview page
+        HBox underOverviewPane = new HBox();
         Text underOverviewText = new Text("\nDersom du ønsker å legge til en utgift eller inntekt, bruk navigasjonsmenyen til venstre.\n");
         underOverviewText.setStyle(
                 "-fx-font-size: 15;" +
                 "-fx-font-weight: bold;");
+        underOverviewPane.getChildren().add(underOverviewText);
+        underOverviewPane.setAlignment(Pos.CENTER);
 
         //overviewWindow- Pane for tableview
         HBox topOverviewPane = new HBox();
@@ -223,7 +239,7 @@ public class MyApp extends Application {
 
 
         VBox bottomOverviewPane = new VBox();
-        bottomOverviewPane.getChildren().addAll(graphsBox, underOverviewText);
+        bottomOverviewPane.getChildren().addAll(graphsBox, underOverviewPane);
 
         //overviewWindow- Separator to differentiate between the different charts
         Separator chartSeparator = new Separator();
