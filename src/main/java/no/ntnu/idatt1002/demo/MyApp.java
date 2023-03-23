@@ -117,32 +117,61 @@ public class MyApp extends Application {
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
 
-        //overviewWindow- TableView for viewing expenses/income
-        TableView<String> expensesIncomeTableView = new TableView<>();
+        //overviewWindow- Data for the TableView (expenses/income)
+        ObservableList<String> expensesData = FXCollections.observableArrayList(
+                "Mat 4500",
+                "Transport 900",
+                "Hobby 400",
+                "Klær 300"
+        );
 
-        TableColumn<String, String> typeColumn = new TableColumn<>("Type");
-//        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        //overviewWindow- TableView for viewing expenses
+        TableView<String> expensesTableView = new TableView<>();
+
+
         TableColumn<String, String> nameColumn = new TableColumn<>("Navn");
+        nameColumn.setMinWidth(100);
 //        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         TableColumn<String, String> sumColumn = new TableColumn<>("Sum");
+        sumColumn.setMinWidth(250);
 //        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
 
-        expensesIncomeTableView.getColumns().add(typeColumn);
-        expensesIncomeTableView.getColumns().add(nameColumn);
-        expensesIncomeTableView.getColumns().add(sumColumn);
+        expensesTableView.getColumns().add(nameColumn);
+        expensesTableView.getColumns().add(sumColumn);
 
         TableCell<String, String> typeCellOne = new TableCell<>();
         typeCellOne.setText("Testcell");
-        expensesIncomeTableView.setMaxHeight(250);
+        expensesTableView.setMaxHeight(250);
 
-        //overviewWindow- Data for the TableView (expenses/income)
-        ObservableList<String> expensesIncomeData = FXCollections.observableArrayList(
-                new String("Mat 4500"),
-                new String("Transport 900"),
-                new String("Hobby 400"),
-                new String("Klær 300")
+        expensesTableView.setMinWidth(350);
+        expensesTableView.setItems(expensesData);
+
+
+        //overviewWindow- Data for the TableView (income)
+        ObservableList<String> incomeData = FXCollections.observableArrayList(
+                "Jobb 3500",
+                "Studielån 8000"
+
         );
-        expensesIncomeTableView.setItems(expensesIncomeData);
+
+        //overviewWindow- TableView for viewing incomes
+        TableView<String> incomeTableView = new TableView<>();
+
+        TableColumn<String, String> incomeNameColumn = new TableColumn<>("Navn");
+        incomeNameColumn.setMinWidth(100);
+//        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<String, String> incomeSumColumn = new TableColumn<>("Sum");
+        incomeSumColumn.setMinWidth(250);
+//        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
+
+        incomeTableView.getColumns().add(incomeNameColumn);
+        incomeTableView.getColumns().add(incomeSumColumn);
+
+        TableCell<String, String> typeIncomeCellOne = new TableCell<>();
+        typeCellOne.setText("Testcell");
+        incomeTableView.setMaxHeight(250);
+        incomeTableView.setMinWidth(350);
+        incomeTableView.setItems(incomeData);
 
         //overviewWindow- Text for top of overview page
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
@@ -156,9 +185,14 @@ public class MyApp extends Application {
                 "-fx-font-size: 15;" +
                 "-fx-font-weight: bold;");
 
-        //overviewWindow- Pane for the bottom of the overview page
+        //overviewWindow- Pane for tableview
+        HBox topOverviewPane = new HBox();
+        topOverviewPane.setSpacing(50);
+        topOverviewPane.autosize();
+        topOverviewPane.getChildren().addAll(expensesTableView, incomeTableView);
+
         VBox bottomOverviewPane = new VBox();
-        bottomOverviewPane.getChildren().addAll(expensesIncomeTableView, underOverviewText);
+        bottomOverviewPane.getChildren().addAll(graphsBox, underOverviewText);
 
         //overviewWindow- Separator to differentiate between the different charts
         Separator chartSeparator = new Separator();
@@ -166,9 +200,10 @@ public class MyApp extends Application {
 
         graphsBox.getChildren().addAll(chart, chartSeparator, barChart);
         overviewWindow.setTop(overviewTitle);
-        overviewWindow.setCenter(bottomOverviewPane);
-        overviewWindow.setBottom(graphsBox);
-        windowPane.getChildren().add(overviewWindow);
+        overviewWindow.setCenter(topOverviewPane);
+        overviewWindow.setBottom(bottomOverviewPane);
+        windowPane.getChildren().addAll(overviewWindow);
+
 
         //Pane for income window
         BorderPane incomeWindow = new BorderPane();
@@ -177,19 +212,16 @@ public class MyApp extends Application {
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
 
-
         //Elements for income window
         BorderPane incomeWindowElements = new BorderPane();
 
         HBox fieldBox = new HBox();
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
-        incomeName.prefWidth(200);
-        incomeName.minWidth(300);
+        incomeName.setPrefWidth(250);
         incomeName.setPromptText("Navn på inntekt (eks.: Lønn, Studielån)");
         TextField incomeSum = new TextField();
-        incomeSum.prefWidth(200);
-        incomeSum.minWidth(200);
+        incomeSum.setPrefWidth(300);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
         addIncomeButton.setStyle(
@@ -218,6 +250,9 @@ public class MyApp extends Application {
         incomeWindow.setVisible(false);
         windowPane.getChildren().addAll(incomeWindow);
 
+        //Pane for settings window
+        BorderPane settingsWindow = new BorderPane();
+
         //Pane for help window
         BorderPane helpWindow = new BorderPane();
         helpWindow.setStyle("-fx-background-color: #ffffff;" +
@@ -241,6 +276,7 @@ public class MyApp extends Application {
         helpFeedbackBox.setSpacing(10);
         TextField feedbackField = new TextField();
         feedbackField.setPrefHeight(200);
+        feedbackField.setMaxWidth(600);
         feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
         Button feedbackButton = new Button("Send tilbakemelding");
         feedbackButton.setStyle("-fx-font-size: 16;" +
@@ -350,6 +386,11 @@ public class MyApp extends Application {
         loggUtButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> System.exit(0));
         loggUtButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> loggUtButton.setStyle(buttonHoverStyle));
         loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));
+
+        addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            incomeSum.setText("");
+            incomeName.setText("");
+        });
 
         navigationMenu.isFillWidth();
         navigationMenu.getChildren().addAll(overviewButton, accountButton, incomeButton
