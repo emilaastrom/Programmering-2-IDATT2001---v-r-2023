@@ -9,14 +9,18 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
-import no.ntnu.idatt1002.demo.data.Type;
+import no.ntnu.idatt1002.demo.data.Expense;
+import no.ntnu.idatt1002.demo.data.Income;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Use this class to start the application
@@ -38,19 +42,22 @@ public class MyApp extends Application {
         //Setting and displaying the scene (FXML SceneBuilder)
         //Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
-        //Temporary test data
+/*        //Temporary test data
         Type testType = new Type(3, 2023);
         testType.addExpense("Mat", 1000);
         testType.addExpense("Transport", 600);
         testType.addExpense("Bolig", 4500);
         testType.addIncome("Studielån", 8100);
-        testType.addIncome("Deltidsjobb", 3000);
+        testType.addIncome("Deltidsjobb", 3000);*/
 
         //Temprary test data V2
-        Budget userOneBudget = new Budget("Nils");
+        Budget userOneBudget = new Budget("OlaNordmann");
         userOneBudget.addExpense("Mat", 3500);
         userOneBudget.addExpense("Transport", 600);
         userOneBudget.addExpense("Bolig", 5000);
+        userOneBudget.addExpense("Fritid", 500);
+        userOneBudget.addExpense("Klær", 1000);
+        userOneBudget.addExpense("Helse", 1000);
         userOneBudget.addIncome("Studielån", 8100);
         userOneBudget.addIncome("Deltidsjobb", 3000);
 
@@ -102,14 +109,16 @@ public class MyApp extends Application {
                 "-fx-alignment: center;" +
                 "-fx-max-height: 350px;");
 
+        ArrayList<Expense> expenses = userOneBudget.getExpenseList();
+        int expenseCount = expenses.size();
         //overviewWindow- PieChart overview of expenses
-        ObservableList<PieChart.Data> pieChartExpenses =
-                FXCollections.observableArrayList(
-                        new PieChart.Data("Mat", 4000),
-                        new PieChart.Data("Bolig", 5000),
-                        new PieChart.Data("Transport", 900),
-                        new PieChart.Data("Hobby", 400),
-                        new PieChart.Data("Klær", 300));
+        ObservableList<PieChart.Data> pieChartExpenses = FXCollections.observableArrayList();
+
+        for (Expense expense : expenses){
+            pieChartExpenses.add(new PieChart.Data(expense.getExpenseName(), expense.getExpenseValue()));
+        }
+
+
         final PieChart chart = new PieChart(pieChartExpenses);
         chart.setTitle("Dine utgifter");
         chart.setLegendVisible(false);
@@ -125,11 +134,27 @@ public class MyApp extends Application {
          */
 
         //overviewWindow- BarChart for income/expenses chart
-        BarChart<?, ?> barChart = new BarChart<>(new CategoryAxis(), new NumberAxis());
-        XYChart.Series series = new XYChart.Series<String, Double>();
-        series.getData().add(new XYChart.Data<>("Inntekter", testType.getTotalIncome()));
-        series.getData().add(new XYChart.Data<>("Utgifter", testType.getTotalExpense()));
-        barChart.getData().addAll(series);
+
+        //Defining the x axis
+        CategoryAxis xAxis = new CategoryAxis();
+
+        xAxis.setCategories(FXCollections.observableArrayList(
+                Arrays.asList("Inntekter", "Utgifter")));
+
+        //Defining the y axis
+        NumberAxis yAxis = new NumberAxis();
+        //yAxis.setLabel("Sum");
+
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Inntekter og utgifter");
+
+
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
+        //series1.setName("Inntekter og utgifter");
+        series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
+        series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
+
+        barChart.getData().add(series1);
         barChart.setTitle("Sum inntekt og utgifter");
         barChart.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 10px;" +
@@ -144,61 +169,39 @@ public class MyApp extends Application {
         tablePane.setTop(tableHBox);
 
 
-        //overviewWindow- Data for the TableView (expenses/income)
-        ObservableList<String> expensesData = FXCollections.observableArrayList(
-                "Mat 4500",
-                "Transport 900",
-                "Hobby 400",
-                "Klær 300"
-        );
-
         //overviewWindow- TableView for viewing expenses
-        TableView<String> expensesTableView = new TableView<>();
+        TableView<Expense> expensesTableView = new TableView<>();
+        ObservableList<Expense> expensesData = FXCollections.observableArrayList(userOneBudget.getExpenseList());
 
-
-        TableColumn<String, String> nameColumn = new TableColumn<>("Navn");
+        TableColumn<Expense, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
-//        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<String, String> sumColumn = new TableColumn<>("Sum (utgift)");
-        sumColumn.setMinWidth(250);
-//        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
-
-        expensesTableView.getColumns().add(nameColumn);
-        expensesTableView.getColumns().add(sumColumn);
-
-        TableCell<String, String> typeCellOne = new TableCell<>();
-        typeCellOne.setText("Testcell");
-        expensesTableView.setMaxHeight(250);
-
-        expensesTableView.setMinWidth(350);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        TableColumn<Expense, Double> sumColumn = new TableColumn<>("Sum (utgift)");
+        sumColumn.setCellValueFactory(new PropertyValueFactory<>("expenseValue"));
         expensesTableView.setItems(expensesData);
+        sumColumn.setMinWidth(250);
+
+        expensesTableView.getColumns().addAll(nameColumn, sumColumn);
+        expensesTableView.setMaxHeight(250);
+        expensesTableView.setMinWidth(350);
 
 
-        //overviewWindow- Data for the TableView (income)
-        ObservableList<String> incomeData = FXCollections.observableArrayList(
-                "Jobb 3500",
-                "Studielån 8000"
-
-        );
 
         //overviewWindow- TableView for viewing incomes
-        TableView<String> incomeTableView = new TableView<>();
+        /*TableView<Income> incomeTableView = new TableView<>();
+        ObservableList<Income> incomeData = FXCollections.observableArrayList(userOneBudget.getIncomeList());
 
-        TableColumn<String, String> incomeNameColumn = new TableColumn<>("Navn");
-        incomeNameColumn.setMinWidth(100);
-//        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<String, String> incomeSumColumn = new TableColumn<>("Sum (inntekt)");
-        incomeSumColumn.setMinWidth(250);
-//        sumColumn.setCellValueFactory(new PropertyValueFactory<>("sum"));
+        TableColumn<Income, String> nameIncomeColumn = new TableColumn<>("Navn");
+        nameColumn.setMinWidth(100);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        TableColumn<Income, String> sumIncomeColumn = new TableColumn<>("Sum (utgift)");
+        sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("expenseValue"));
+        expensesTableView.setItems(incomeData);
+        sumIncomeColumn.setMinWidth(250);
 
-        incomeTableView.getColumns().add(incomeNameColumn);
-        incomeTableView.getColumns().add(incomeSumColumn);
-
-        TableCell<String, String> typeIncomeCellOne = new TableCell<>();
-        typeCellOne.setText("Testcell");
-        incomeTableView.setMaxHeight(250);
-        incomeTableView.setMinWidth(350);
-        incomeTableView.setItems(incomeData);
+        expensesTableView.getColumns().add(nameColumn);
+        expensesTableView.setMaxHeight(250);
+        expensesTableView.setMinWidth(350);*/
 
         //overviewWindow- Text for top of overview page
         HBox titleOverviewPane = new HBox();
@@ -228,7 +231,8 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
         Separator graphSeparator = new Separator();
         graphSeparator.setOrientation(Orientation.HORIZONTAL);
-        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
+        tableHBox.getChildren().addAll(expensesTableView);
+//        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
         tableHBox.setSpacing(45);
         tablePane.setTop(tableHBox);
         tablePane.setBottom(graphSeparator);
@@ -546,13 +550,18 @@ public class MyApp extends Application {
         loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));
 
         addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            testType.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
+
+            userOneBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
+
+            series1.getData().removeAll(series1.getData());
+            series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
+            series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
+
+            barChart.getData().add(series1);
+
             incomeSum.setText("");
             incomeName.setText("");
-            series.setData(FXCollections.observableArrayList());
-            series.getData().add(new XYChart.Data<>("Inntekter", testType.getTotalIncome()));
-            series.getData().add(new XYChart.Data<>("Utgifter", testType.getTotalExpense()));
-            barChart.getData().addAll(series);
+
         });
 
         navigationMenu.isFillWidth();
