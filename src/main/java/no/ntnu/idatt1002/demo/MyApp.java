@@ -188,20 +188,22 @@ public class MyApp extends Application {
 
 
         //overviewWindow- TableView for viewing incomes
-        /*TableView<Income> incomeTableView = new TableView<>();
+        TableView<Income> incomeTableView = new TableView<>();
         ObservableList<Income> incomeData = FXCollections.observableArrayList(userOneBudget.getIncomeList());
 
         TableColumn<Income, String> nameIncomeColumn = new TableColumn<>("Navn");
-        nameColumn.setMinWidth(100);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
-        TableColumn<Income, String> sumIncomeColumn = new TableColumn<>("Sum (utgift)");
-        sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("expenseValue"));
-        expensesTableView.setItems(incomeData);
+        nameIncomeColumn.setMinWidth(100);
+        nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
+
+        TableColumn<Income, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
+        sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
+
+        incomeTableView.setItems(incomeData);
         sumIncomeColumn.setMinWidth(250);
 
-        expensesTableView.getColumns().add(nameColumn);
-        expensesTableView.setMaxHeight(250);
-        expensesTableView.setMinWidth(350);*/
+        incomeTableView.getColumns().addAll(nameIncomeColumn, sumIncomeColumn);
+        incomeTableView.setMaxHeight(250);
+        incomeTableView.setMinWidth(350);
 
         //overviewWindow- Text for top of overview page
         HBox titleOverviewPane = new HBox();
@@ -231,8 +233,7 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
         Separator graphSeparator = new Separator();
         graphSeparator.setOrientation(Orientation.HORIZONTAL);
-        tableHBox.getChildren().addAll(expensesTableView);
-//        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
+        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
         tableHBox.setSpacing(45);
         tablePane.setTop(tableHBox);
         tablePane.setBottom(graphSeparator);

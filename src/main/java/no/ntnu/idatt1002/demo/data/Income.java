@@ -1,16 +1,16 @@
 package no.ntnu.idatt1002.demo.data;
 
 public class Income {
-    private final String income;
+    private final String incomeName;
     private double incomeValue;
 
-    Income(String income, double incomeValue){
-        this.income = income;
+    Income(String incomeName, double incomeValue){
+        this.incomeName = incomeName;
         this.incomeValue = incomeValue;
     }
 
-    public String getIncome() {
-        return income;
+    public String getIncomeName() {
+        return incomeName;
     }
 
     public double getIncomeValue() {

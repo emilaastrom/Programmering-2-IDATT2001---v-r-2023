@@ -73,7 +73,7 @@ public class Budget {
 
     public void removeIncome(String income) {
         for (Income i : incomeList) {
-            if (i.getIncome().equals(income)) {
+            if (i.getIncomeName().equals(income)) {
                 incomeList.remove(i);
 
                 /*try{
@@ -204,7 +204,7 @@ public class Budget {
 
     public void editIncome(String income, double value) {
         for (Income i : incomeList) {
-            if (i.getIncome().equals(income)) {
+            if (i.getIncomeName().equals(income)) {
                 i.setIncomeValue(value);
                 break;
             }
@@ -231,7 +231,7 @@ public class Budget {
 
     public double getIncomeValue(String incomeName){
         for (Income i : incomeList) {
-            if (i.getIncome().equals(incomeName)) {
+            if (i.getIncomeName().equals(incomeName)) {
                 return i.getIncomeValue();
             }
         }
