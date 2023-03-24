@@ -21,6 +21,7 @@ import no.ntnu.idatt1002.demo.data.Income;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Use this class to start the application
@@ -191,7 +192,7 @@ public class MyApp extends Application {
 
         //overviewWindow- TableView for viewing incomes
         TableView<Income> incomeTableView = new TableView<>();
-        ObservableList<Income> incomeData = FXCollections.observableArrayList(userOneBudget.getIncomeList());
+        AtomicReference<ObservableList<Income>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
 
         TableColumn<Income, String> nameIncomeColumn = new TableColumn<>("Navn");
         nameIncomeColumn.setMinWidth(100);
@@ -200,7 +201,7 @@ public class MyApp extends Application {
         TableColumn<Income, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
 
-        incomeTableView.setItems(incomeData);
+        incomeTableView.setItems(incomeData.get());
         sumIncomeColumn.setMinWidth(250);
 
         incomeTableView.getColumns().addAll(nameIncomeColumn, sumIncomeColumn);
@@ -561,8 +562,9 @@ public class MyApp extends Application {
             series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
 
             barChart.getData().add(series1);
-            incomeTableView.setItems(null);
-            incomeTableView.setItems(incomeData);
+
+            incomeData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+            incomeTableView.setItems(incomeData.get());
 
 
             incomeSum.setText("");
