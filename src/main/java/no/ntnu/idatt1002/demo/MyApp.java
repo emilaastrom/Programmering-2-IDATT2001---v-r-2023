@@ -557,10 +557,11 @@ public class MyApp extends Application {
 
             userOneBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
 
-            series1.getData().removeAll(series1.getData());
+//            series1.getData().clear();
+            barChart.getData().remove(series1);
+            series1.getData().clear();
             series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
             series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
-
             barChart.getData().add(series1);
 
             incomeData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
