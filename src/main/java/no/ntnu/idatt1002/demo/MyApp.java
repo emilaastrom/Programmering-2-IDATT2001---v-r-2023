@@ -122,6 +122,7 @@ public class MyApp extends Application {
         final PieChart chart = new PieChart(pieChartExpenses);
         chart.setTitle("Dine utgifter");
         chart.setLegendVisible(false);
+        chart.setMaxHeight(250);
         /*chart.getData().addListener((javafx.collections.ListChangeListener.Change<? extends PieChart.Data> c) -> {
             while (c.next()) {
                 for (PieChart.Data data : c.getAddedSubList()) {
@@ -147,6 +148,7 @@ public class MyApp extends Application {
 
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Inntekter og utgifter");
+        barChart.setMaxHeight(250);
 
 
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
@@ -182,7 +184,7 @@ public class MyApp extends Application {
         sumColumn.setMinWidth(250);
 
         expensesTableView.getColumns().addAll(nameColumn, sumColumn);
-        expensesTableView.setMaxHeight(250);
+        expensesTableView.setMaxHeight(200);
         expensesTableView.setMinWidth(350);
 
 
@@ -202,7 +204,7 @@ public class MyApp extends Application {
         sumIncomeColumn.setMinWidth(250);
 
         incomeTableView.getColumns().addAll(nameIncomeColumn, sumIncomeColumn);
-        incomeTableView.setMaxHeight(250);
+        incomeTableView.setMaxHeight(200);
         incomeTableView.setMinWidth(350);
 
         //overviewWindow- Text for top of overview page
@@ -370,7 +372,7 @@ public class MyApp extends Application {
         helpFeedbackBox.setPadding(new Insets(10, 10, 10, 10));
         helpFeedbackBox.setSpacing(10);
         TextField feedbackField = new TextField();
-        feedbackField.setPrefHeight(200);
+        feedbackField.setPrefHeight(150);
         feedbackField.setMaxWidth(600);
         feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
         Button feedbackButton = new Button("Send tilbakemelding");
@@ -559,6 +561,9 @@ public class MyApp extends Application {
             series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
 
             barChart.getData().add(series1);
+            incomeTableView.setItems(null);
+            incomeTableView.setItems(incomeData);
+
 
             incomeSum.setText("");
             incomeName.setText("");
@@ -572,7 +577,7 @@ public class MyApp extends Application {
         root.setCenter(windowPane);
 
 
-        Scene scene = new Scene(root, 1250, 1000);
+        Scene scene = new Scene(root, 1000  , 750);
         stage.setTitle("Budsjettverktøy");
         stage.setScene(scene);
         stage.show();
