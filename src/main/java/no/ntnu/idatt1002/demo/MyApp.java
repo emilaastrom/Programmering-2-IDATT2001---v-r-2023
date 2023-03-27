@@ -208,6 +208,7 @@ public class MyApp extends Application {
         incomeTableView.setMaxHeight(200);
         incomeTableView.setMinWidth(350);
 
+
         //overviewWindow- Text for top of overview page
         HBox titleOverviewPane = new HBox();
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
@@ -268,6 +269,25 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
 
         //Elements for income window
+
+        //incomeWindow- TableView for viewing incomes
+        TableView<Income> incomePageTableView = new TableView<>();
+        AtomicReference<ObservableList<Income>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+
+        TableColumn<Income, String> nameIncomePageColumn = new TableColumn<>("Navn");
+        nameIncomePageColumn.setMinWidth(100);
+        nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
+
+        TableColumn<Income, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
+        sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
+
+        incomePageTableView.setItems(incomePageData.get());
+        sumIncomePageColumn.setMinWidth(698);
+
+        incomePageTableView.getColumns().addAll(nameIncomePageColumn, sumIncomePageColumn);
+        incomePageTableView.setMaxHeight(200);
+        incomePageTableView.setMinWidth(350);
+
         BorderPane incomeWindowElements = new BorderPane();
 
         HBox fieldBox = new HBox();
@@ -291,6 +311,7 @@ public class MyApp extends Application {
         fieldBox.setAlignment(Pos.CENTER);
 
         incomeWindowElements.setCenter(fieldBox);
+        incomeWindowElements.setTop(incomePageTableView);
 
 
         HBox incomeTitleBox = new HBox();
@@ -346,6 +367,67 @@ public class MyApp extends Application {
         settingsWindow.setCenter(settingsMiddleBox);
         settingsWindow.setVisible(false);
         windowPane.getChildren().addAll(settingsWindow);
+
+        //savingsWindow - Pane for savings window
+
+        BorderPane savingsWindow = new BorderPane();
+
+        savingsWindow.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+
+        //savingsWindow - Elements for savings window
+        VBox savingsWindowTopBox = new VBox();
+        savingsWindowTopBox.setAlignment(Pos.CENTER);
+        Text savingsWindowTitle = new Text("Her kan du definere sparemål.");
+        savingsWindowTitle.setStyle(underTitleStyle);
+        savingsWindowTopBox.getChildren().add(savingsWindowTitle);
+
+        VBox savingsWindowMiddleBox = new VBox();
+        savingsWindowMiddleBox.setAlignment(Pos.CENTER);
+
+        HBox exampleSavingsGoal = new HBox();
+        ProgressBar savingsProgressBar = new ProgressBar();
+        savingsProgressBar.setProgress(0.75);
+        savingsProgressBar.setPrefWidth(500);
+        exampleSavingsGoal.setAlignment(Pos.CENTER);
+        exampleSavingsGoal.getChildren().addAll(new Text("Ny snøskuter: "),savingsProgressBar, new Text(" 75% - 22500/30000"));
+
+        HBox exampleSavingsGoal2 = new HBox();
+        ProgressBar savingsProgressBar2 = new ProgressBar();
+        savingsProgressBar2.setProgress(0.25);
+        savingsProgressBar2.setPrefWidth(500);
+        exampleSavingsGoal2.setAlignment(Pos.CENTER);
+        exampleSavingsGoal2.getChildren().addAll(new Text("Ny bil: "),savingsProgressBar2, new Text(" 25% - 7500/30000"));
+
+        savingsWindowMiddleBox.getChildren().addAll(exampleSavingsGoal, exampleSavingsGoal2);
+
+        HBox savingsWindowBottomBox = new HBox();
+        savingsWindowBottomBox.setSpacing(10);
+        savingsWindowBottomBox.setAlignment(Pos.CENTER);
+        savingsWindowBottomBox.setPadding(new Insets(10, 10, 200, 10));
+        TextField savingsName = new TextField();
+        savingsName.setPrefWidth(250);
+        savingsName.setPromptText("Navn på sparemål (eks.: Ny snøskuter)");
+        TextField savingsSum = new TextField();
+        savingsSum.setPrefWidth(300);
+        savingsSum.setPromptText("Sum på sparemål (eks.: 30000)");
+        Button addSavingsButton = new Button("Legg til sparemål");
+        addSavingsButton.setStyle(
+                "-fx-background-color: #ffffff; " +
+                "-fx-border-color: #116c75;" +
+                "-fx-text-fill: #116c75;" +
+                "-fx-pref-width: 150;" +
+                "-fx-highlight-fill: #116c75;" +
+                "-fx-alignment: center;");
+        savingsWindowBottomBox.getChildren().addAll(savingsName, savingsSum, addSavingsButton);
+
+        savingsWindow.setTop(savingsWindowTopBox);
+        savingsWindow.setCenter(savingsWindowMiddleBox);
+        savingsWindow.setBottom(savingsWindowBottomBox);
+        savingsWindow.setVisible(false);
+        windowPane.getChildren().addAll(savingsWindow);
 
         //Pane for help window
         BorderPane helpWindow = new BorderPane();
@@ -438,6 +520,7 @@ public class MyApp extends Application {
             overviewWindow.setVisible(true);
             incomeWindow.setVisible(false);
             settingsWindow.setVisible(false);
+            savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonHoverStyle);
 //            accountButton.setStyle(buttonStyle);
@@ -470,6 +553,7 @@ public class MyApp extends Application {
             overviewWindow.setVisible(false);
             helpWindow.setVisible(false);
             settingsWindow.setVisible(false);
+            savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
 //            accountButton.setStyle(buttonStyle);
@@ -494,7 +578,17 @@ public class MyApp extends Application {
         expensesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> expensesButton.setStyle(buttonStyle));
 
         savingsButton.setStyle(buttonStyle);
-        savingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Sparemål"));
+        savingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            titleText.setText("Sparemål");
+            overviewWindow.setVisible(false);
+            incomeWindow.setVisible(false);
+            //expensesWindow.setVisible(false);
+            savingsWindow.setVisible(true);
+            helpWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+
+
+        });
         savingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> savingsButton.setStyle(buttonHoverStyle));
         savingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> savingsButton.setStyle(buttonStyle));
 
@@ -505,6 +599,7 @@ public class MyApp extends Application {
             incomeWindow.setVisible(false);
             helpWindow.setVisible(false);
             settingsWindow.setVisible(true);
+            savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
 //            accountButton.setStyle(buttonStyle);
@@ -529,6 +624,7 @@ public class MyApp extends Application {
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
             settingsWindow.setVisible(false);
+            savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
 //            accountButton.setStyle(buttonStyle);
@@ -566,6 +662,8 @@ public class MyApp extends Application {
 
             incomeData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
             incomeTableView.setItems(incomeData.get());
+            incomePageData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+            incomePageTableView.setItems(incomePageData.get());
 
 
             incomeSum.setText("");
