@@ -16,8 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
-import no.ntnu.idatt1002.demo.data.Expense;
-import no.ntnu.idatt1002.demo.data.Income;
+import no.ntnu.idatt1002.demo.data.BudgetItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,8 +60,6 @@ public class MyApp extends Application {
         userOneBudget.addExpense("Helse", 1000);
         userOneBudget.addIncome("Studielån", 8100);
         userOneBudget.addIncome("Deltidsjobb", 3000);
-
-
 
 
         BorderPane root = new BorderPane();
@@ -110,13 +107,13 @@ public class MyApp extends Application {
                 "-fx-alignment: center;" +
                 "-fx-max-height: 350px;");
 
-        ArrayList<Expense> expenses = userOneBudget.getExpenseList();
+        ArrayList<BudgetItem> expenses = userOneBudget.getExpenseList();
         int expenseCount = expenses.size();
         //overviewWindow- PieChart overview of expenses
         ObservableList<PieChart.Data> pieChartExpenses = FXCollections.observableArrayList();
 
-        for (Expense expense : expenses){
-            pieChartExpenses.add(new PieChart.Data(expense.getExpenseName(), expense.getExpenseValue()));
+        for (BudgetItem expense : expenses){
+            pieChartExpenses.add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));
         }
 
 
@@ -173,13 +170,13 @@ public class MyApp extends Application {
 
 
         //overviewWindow- TableView for viewing expenses
-        TableView<Expense> expensesTableView = new TableView<>();
-        ObservableList<Expense> expensesData = FXCollections.observableArrayList(userOneBudget.getExpenseList());
+        TableView<BudgetItem> expensesTableView = new TableView<>();
+        ObservableList<BudgetItem> expensesData = FXCollections.observableArrayList(userOneBudget.getExpenseList());
 
-        TableColumn<Expense, String> nameColumn = new TableColumn<>("Navn");
+        TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
-        TableColumn<Expense, Double> sumColumn = new TableColumn<>("Sum (utgift)");
+        TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setCellValueFactory(new PropertyValueFactory<>("expenseValue"));
         expensesTableView.setItems(expensesData);
         sumColumn.setMinWidth(250);
@@ -191,14 +188,14 @@ public class MyApp extends Application {
 
 
         //overviewWindow- TableView for viewing incomes
-        TableView<Income> incomeTableView = new TableView<>();
-        AtomicReference<ObservableList<Income>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+        TableView<BudgetItem> incomeTableView = new TableView<>();
+        AtomicReference<ObservableList<BudgetItem>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
 
-        TableColumn<Income, String> nameIncomeColumn = new TableColumn<>("Navn");
+        TableColumn<BudgetItem, String> nameIncomeColumn = new TableColumn<>("Navn");
         nameIncomeColumn.setMinWidth(100);
         nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
 
-        TableColumn<Income, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
+        TableColumn<BudgetItem, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
 
         incomeTableView.setItems(incomeData.get());
@@ -271,14 +268,14 @@ public class MyApp extends Application {
         //Elements for income window
 
         //incomeWindow- TableView for viewing incomes
-        TableView<Income> incomePageTableView = new TableView<>();
-        AtomicReference<ObservableList<Income>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+        TableView<BudgetItem> incomePageTableView = new TableView<>();
+        AtomicReference<ObservableList<BudgetItem>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
 
-        TableColumn<Income, String> nameIncomePageColumn = new TableColumn<>("Navn");
+        TableColumn<BudgetItem, String> nameIncomePageColumn = new TableColumn<>("Navn");
         nameIncomePageColumn.setMinWidth(100);
         nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
 
-        TableColumn<Income, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
+        TableColumn<BudgetItem, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
 
         incomePageTableView.setItems(incomePageData.get());
