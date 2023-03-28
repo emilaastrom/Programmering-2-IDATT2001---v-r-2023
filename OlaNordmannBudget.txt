@@ -1,0 +1,17 @@
+
+Expense: Mat
+Value: 3500.0
+Expense: Transport
+Value: 600.0
+Expense: Bolig
+Value: 5000.0
+Expense: Fritid
+Value: 500.0
+Expense: Klær
+Value: 1000.0
+Expense: Helse
+Value: 1000.0
+Income: Studielån
+Value: 8100.0
+Income: Deltidsjobb
+Value: 3000.0
