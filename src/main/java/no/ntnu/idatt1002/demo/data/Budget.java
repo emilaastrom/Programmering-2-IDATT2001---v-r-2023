@@ -8,9 +8,9 @@ import java.util.Date;
 public class Budget {
     private String username;
 
-    private ArrayList<Income> incomeList;
+    private ArrayList<BudgetItem> incomeList;
 
-    private ArrayList<Expense> expenseList;
+    private ArrayList<BudgetItem> expenseList;
     public Budget(String username) {
         this.username = username;
         this.incomeList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Budget {
 
     public void addIncome(String income, double value) {
 
-        Income newIncome = new Income(income, value);
+        BudgetItem newIncome = new BudgetItem(income, value);
         incomeList.add(newIncome);
 
         try {
@@ -56,7 +56,7 @@ public class Budget {
     }
 
     public void addExpense(String expense, double value) {
-        Expense newExpense = new Expense(expense, value);
+        BudgetItem newExpense = new BudgetItem(expense, value);
         expenseList.add(newExpense);
 
         try {
@@ -72,8 +72,8 @@ public class Budget {
     }
 
     public void removeIncome(String income) {
-        for (Income i : incomeList) {
-            if (i.getIncomeName().equals(income)) {
+        for (BudgetItem i : incomeList) {
+            if (i.getBudgetItemName().equals(income)) {
                 incomeList.remove(i);
 
                 /*try{
@@ -150,8 +150,8 @@ public class Budget {
     }
 
     public void removeExpense(String expense) {
-        for (Expense e : expenseList) {
-            if (e.getExpenseName().equals(expense)) {
+        for (BudgetItem e : expenseList) {
+            if (e.getBudgetItemName().equals(expense)) {
                 expenseList.remove(e);
 
                 try {
@@ -203,36 +203,36 @@ public class Budget {
     }
 
     public void editIncome(String income, double value) {
-        for (Income i : incomeList) {
-            if (i.getIncomeName().equals(income)) {
-                i.setIncomeValue(value);
+        for (BudgetItem i : incomeList) {
+            if (i.getBudgetItemName().equals(income)) {
+                i.setBudgetItemValue(value);
                 break;
             }
         }
     }
 
     public void editExpense(String expense, double value) {
-        for (Expense e : expenseList) {
-            if (e.getExpenseName().equals(expense)) {
-                e.setExpenseValue(value);
+        for (BudgetItem e : expenseList) {
+            if (e.getBudgetItemName().equals(expense)) {
+                e.setBudgetItemValue(value);
                 break;
             }
         }
     }
 
     public double getExpenseValue(String expenseName){
-        for (Expense e : expenseList) {
-            if (e.getExpenseName().equals(expenseName)) {
-                return e.getExpenseValue();
+        for (BudgetItem e : expenseList) {
+            if (e.getBudgetItemName().equals(expenseName)) {
+                return e.getBudgetItemValue();
             }
         }
         return -1;
     }
 
     public double getIncomeValue(String incomeName){
-        for (Income i : incomeList) {
-            if (i.getIncomeName().equals(incomeName)) {
-                return i.getIncomeValue();
+        for (BudgetItem i : incomeList) {
+            if (i.getBudgetItemName().equals(incomeName)) {
+                return i.getBudgetItemValue();
             }
         }
         return -1;
@@ -240,28 +240,28 @@ public class Budget {
 
     public double getTotalIncome() {
         double totalIncome = 0;
-        for (Income i : incomeList) {
-            totalIncome += i.getIncomeValue();
+        for (BudgetItem i : incomeList) {
+            totalIncome += i.getBudgetItemValue();
         }
         return totalIncome;
     }
 
     public double getTotalExpense() {
         double totalExpense = 0;
-        for (Expense e : expenseList) {
-            totalExpense += e.getExpenseValue();
+        for (BudgetItem e : expenseList) {
+            totalExpense += e.getBudgetItemValue();
         }
         return totalExpense;
     }
 
-    public ArrayList<Income> getIncomeList() {
-        ArrayList<Income> copyIncomeList = new ArrayList<>();
+    public ArrayList<BudgetItem> getIncomeList() {
+        ArrayList<BudgetItem> copyIncomeList = new ArrayList<>();
         copyIncomeList = this.incomeList;
         return copyIncomeList;
     }
 
-    public ArrayList<Expense> getExpenseList() {
-        ArrayList<Expense> copyExpenseList = new ArrayList<>();
+    public ArrayList<BudgetItem> getExpenseList() {
+        ArrayList<BudgetItem> copyExpenseList = new ArrayList<>();
         copyExpenseList = this.expenseList;
         return expenseList;
     }
