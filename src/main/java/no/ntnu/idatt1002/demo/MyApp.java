@@ -43,13 +43,6 @@ public class MyApp extends Application {
         //Setting and displaying the scene (FXML SceneBuilder)
         //Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
-/*        //Temporary test data
-        Type testType = new Type(3, 2023);
-        testType.addExpense("Mat", 1000);
-        testType.addExpense("Transport", 600);
-        testType.addExpense("Bolig", 4500);
-        testType.addIncome("Studielån", 8100);
-        testType.addIncome("Deltidsjobb", 3000);*/
 
         //Temprary test data V2
         Budget userOneBudget = new Budget("OlaNordmann");
@@ -102,13 +95,11 @@ public class MyApp extends Application {
         //overviewWindow- HBox to contain different graphs
         HBox graphsBox = new HBox();
         graphsBox.setStyle("-fx-background-color: #ffffff;" +
-//                "-fx-border-color: #116c75;" +
-//                "-fx-border-width: 1px;" +
-//                "-fx-border-radius: 5px;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 20px;" +
                 "-fx-alignment: center;" +
                 "-fx-max-height: 350px;");
+
 
         ArrayList<Expense> expenses = userOneBudget.getExpenseList();
         int expenseCount = expenses.size();
@@ -124,18 +115,6 @@ public class MyApp extends Application {
         chart.setTitle("Dine utgifter");
         chart.setLegendVisible(false);
         chart.setMaxHeight(250);
-        /*chart.getData().addListener((javafx.collections.ListChangeListener.Change<? extends PieChart.Data> c) -> {
-            while (c.next()) {
-                for (PieChart.Data data : c.getAddedSubList()) {
-                    data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {
-                        System.out.println("Clicked on " + data.getName());
-                    });
-                }
-            }
-        });
-         */
-
-        //overviewWindow- BarChart for income/expenses chart
 
         //Defining the x axis
         CategoryAxis xAxis = new CategoryAxis();
@@ -145,7 +124,7 @@ public class MyApp extends Application {
 
         //Defining the y axis
         NumberAxis yAxis = new NumberAxis();
-        //yAxis.setLabel("Sum");
+
 
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Inntekter og utgifter");
@@ -458,10 +437,6 @@ public class MyApp extends Application {
         //Initializing to hoverstyle as default
         overviewButton.setStyle(buttonHoverStyle);
 
- /*       accountButton.setStyle(buttonStyle);
-        accountButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Konto"));
-        accountButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> accountButton.setStyle(buttonHoverStyle));
-        accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));*/
 
         incomeButton.setStyle(buttonStyle);
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -531,7 +506,6 @@ public class MyApp extends Application {
             settingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
-//            accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
@@ -557,7 +531,7 @@ public class MyApp extends Application {
 
             userOneBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
 
-//            series1.getData().clear();
+
             barChart.getData().remove(series1);
             series1.getData().clear();
             series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
