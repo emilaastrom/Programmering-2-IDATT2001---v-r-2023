@@ -51,6 +51,11 @@ class BudgetTest {
 
     @Test
     void removeExpense() {
+        // Forventer 5000 som betyr at utgiften finnes
+        assertEquals(5000, testBudget.getExpenseValue("Mat"));
+
+        testBudget.removeExpense("Mat");
+        assertNotEquals(5000, testBudget.getExpenseValue("Mat"));
     }
 
     @Test
