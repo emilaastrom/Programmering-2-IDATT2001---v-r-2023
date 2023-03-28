@@ -502,7 +502,7 @@ public class MyApp extends Application {
 
         //Buttons for navigating the application
         Button overviewButton = new Button("Oversikt");
-//        Button accountButton = new Button("Konto");
+        Button accountButton = new Button("Konto");
         Button incomeButton = new Button("Inntekter");
         Button expensesButton = new Button("Utgifter");
         Button savingsButton = new Button("Sparemål");
@@ -520,7 +520,7 @@ public class MyApp extends Application {
             savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonHoverStyle);
-//            accountButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
@@ -538,10 +538,10 @@ public class MyApp extends Application {
         //Initializing to hoverstyle as default
         overviewButton.setStyle(buttonHoverStyle);
 
- /*       accountButton.setStyle(buttonStyle);
+        accountButton.setStyle(buttonStyle);
         accountButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Konto"));
         accountButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> accountButton.setStyle(buttonHoverStyle));
-        accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));*/
+        accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));
 
         incomeButton.setStyle(buttonStyle);
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -553,7 +553,7 @@ public class MyApp extends Application {
             savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
-//            accountButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonHoverStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
@@ -599,7 +599,7 @@ public class MyApp extends Application {
             savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
-//            accountButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
@@ -624,7 +624,7 @@ public class MyApp extends Application {
             savingsWindow.setVisible(false);
 
             overviewButton.setStyle(buttonStyle);
-//            accountButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
@@ -669,7 +669,7 @@ public class MyApp extends Application {
         });
 
         navigationMenu.isFillWidth();
-        navigationMenu.getChildren().addAll(overviewButton, incomeButton
+        navigationMenu.getChildren().addAll(overviewButton, accountButton, incomeButton
         , expensesButton, savingsButton, settingsButton, helpButton, loggUtButton);
         root.setLeft(navigationMenu);
         root.setCenter(windowPane);
