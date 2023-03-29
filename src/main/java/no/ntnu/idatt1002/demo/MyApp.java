@@ -17,7 +17,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.BudgetItem;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
@@ -62,21 +61,33 @@ public class MyApp extends Application {
                 "-fx-font-size: 18;" +
                 "-fx-font-weight: bold;");
 
+        String welcomeTextStyle = (
+                "-fx-font-size: 18;" +
+                "-fx-font-weight: bold;" +
+                "-fx-text-fill: #ffffff;");
+
         //HBox for current page title
         HBox titleBox = new HBox();
         Text titleText = new Text();
         titleText.setText("Oversikt");
-        titleText.setStyle("-fx-font-size: 24;" +
-                "-fx-text-fill: #ffffff;" +
-                "-fx-alignment: center;" +
-                "-fx-font-weight: bold;");
         titleText.setFill(Color.WHITE);
         titleText.setUnderline(true);
 
         titleBox.setAlignment(javafx.geometry.Pos.CENTER);
         titleBox.setStyle("-fx-background-color: rgba(79,110,57,0.7);" + "-fx-padding: 10;");
         titleBox.getChildren().add(titleText);
-        root.setTop(titleBox);
+
+        BorderPane topBoxPane = new BorderPane();
+        topBoxPane.setPrefHeight(30);
+        topBoxPane.setPadding(new Insets(10, 10, 10, 10));
+
+        Text topBoxText = new Text();
+        topBoxText.setText("Velkommen, " + userOneBudget.getUsername());
+        topBoxText.setFill(Color.BLACK);
+        topBoxText.setStyle("-fx-padding: 10");
+        topBoxPane.setLeft(topBoxText);
+
+        root.setTop(topBoxPane);
 
         //StackPane for the different windows (overview, expenses, income, settings)
         StackPane windowPane = new StackPane();
@@ -153,9 +164,9 @@ public class MyApp extends Application {
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("expenseName"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
-        sumColumn.setCellValueFactory(new PropertyValueFactory<>("expenseValue"));
+        sumColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
         expensesTableView.setItems(expensesData);
         sumColumn.setMinWidth(250);
 
@@ -171,10 +182,10 @@ public class MyApp extends Application {
 
         TableColumn<BudgetItem, String> nameIncomeColumn = new TableColumn<>("Navn");
         nameIncomeColumn.setMinWidth(100);
-        nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
+        nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
-        sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
+        sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomeTableView.setItems(incomeData.get());
         sumIncomeColumn.setMinWidth(250);

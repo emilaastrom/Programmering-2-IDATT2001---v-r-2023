@@ -266,4 +266,7 @@ public class Budget {
         return expenseList;
     }
 
+    public String getUsername() {
+        return username;
+    }
 }
