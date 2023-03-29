@@ -111,14 +111,14 @@ public class MyApp extends Application {
         ArrayList<BudgetItem> expenses = userOneBudget.getExpenseList();
         int expenseCount = expenses.size();
         //overviewWindow- PieChart overview of expenses
-        ObservableList<PieChart.Data> pieChartExpenses = FXCollections.observableArrayList();
+        AtomicReference<ObservableList<PieChart.Data>> pieChartExpenses = new AtomicReference<>(FXCollections.observableArrayList());
 
         for (BudgetItem expense : expenses){
-            pieChartExpenses.add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));
+            pieChartExpenses.get().add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));
         }
 
 
-        final PieChart chart = new PieChart(pieChartExpenses);
+        final PieChart chart = new PieChart(pieChartExpenses.get());
         chart.setTitle("Dine utgifter");
         chart.setLegendVisible(false);
         chart.setMaxHeight(250);
@@ -262,10 +262,10 @@ public class MyApp extends Application {
 
         TableColumn<BudgetItem, String> nameIncomePageColumn = new TableColumn<>("Navn");
         nameIncomePageColumn.setMinWidth(100);
-        nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeName"));
+        nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
-        sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("incomeValue"));
+        sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomePageTableView.setItems(incomePageData.get());
         sumIncomePageColumn.setMinWidth(698);
@@ -280,7 +280,7 @@ public class MyApp extends Application {
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
         incomeName.setPrefWidth(250);
-        incomeName.setPromptText("Navn på inntekt (eks.: Lønn, Studielån)");
+        incomeName.setPromptText("Navn på inntekt (eks.: Lønn/Studielån)");
         TextField incomeSum = new TextField();
         incomeSum.setPrefWidth(300);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
@@ -309,6 +309,69 @@ public class MyApp extends Application {
         incomeWindow.setCenter(incomeWindowElements);
         incomeWindow.setVisible(false);
         windowPane.getChildren().addAll(incomeWindow);
+
+        //Pane for expenses window
+        BorderPane expensesWindow = new BorderPane();
+        expensesWindow.setStyle("-fx-background-color: #ffffff;" +
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+
+        //Elements for expenses window
+
+        //expensesWindow- TableView for viewing incomes
+        TableView<BudgetItem> expensesPageTableView = new TableView<>();
+        AtomicReference<ObservableList<BudgetItem>> expensesPageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+
+        TableColumn<BudgetItem, String> nameExpensesPageColumn = new TableColumn<>("Navn");
+        nameExpensesPageColumn.setMinWidth(100);
+        nameExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
+
+        TableColumn<BudgetItem, Double> sumExpensesPageColumn = new TableColumn<>("Sum (utgift)");
+        sumExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
+
+        expensesPageTableView.setItems(expensesData);
+        sumExpensesPageColumn.setMinWidth(698);
+
+        expensesPageTableView.getColumns().addAll(nameExpensesPageColumn, sumExpensesPageColumn);
+        expensesPageTableView.setMaxHeight(200);
+        expensesPageTableView.setMinWidth(350);
+
+        BorderPane expensesWindowElements = new BorderPane();
+
+        HBox fieldBox2 = new HBox();
+        fieldBox2.setSpacing(10);
+        TextField expensesName = new TextField();
+        expensesName.setPrefWidth(250);
+        expensesName.setPromptText("Navn på utgift (eks.: Hobby/Strøm)");
+        TextField expensesSum = new TextField();
+        expensesSum.setPrefWidth(300);
+        expensesSum.setPromptText("Sum på utgift (eks.: 10000)");
+        Button addExpensesButton = new Button("Legg til utgift");
+        addExpensesButton.setStyle(
+                "-fx-background-color: #ffffff; " +
+                        "-fx-border-color: #116c75;" +
+                        "-fx-text-fill: #116c75;" +
+                        "-fx-pref-width: 150;" +
+                        "-fx-highlight-fill: #116c75;" +
+                        "-fx-alignment: center;");
+
+        fieldBox2.getChildren().addAll(expensesName, expensesSum, addExpensesButton);
+        fieldBox2.setAlignment(Pos.CENTER);
+
+        expensesWindowElements.setCenter(fieldBox2);
+        expensesWindowElements.setTop(expensesPageTableView);
+
+
+        HBox expensesTitleBox = new HBox();
+        Text expensesTitle = new Text("\nVelkommen til utgiftssiden, her kan du legge til utgifter!\n");
+        expensesTitle.setStyle(underTitleStyle);
+        expensesTitleBox.getChildren().add(expensesTitle);
+        expensesTitleBox.setAlignment(Pos.CENTER);
+        expensesWindow.setTop(expensesTitleBox);
+        expensesWindow.setCenter(expensesWindowElements);
+        expensesWindow.setVisible(false);
+        windowPane.getChildren().addAll(expensesWindow);
 
         //settingsWindow -Pane for settings window
         BorderPane settingsWindow = new BorderPane();
@@ -487,7 +550,8 @@ public class MyApp extends Application {
                 "-fx-pref-height: 50;" +
                 "-fx-highlight-fill: #116c75;" +
                 "-fx-highlight-text-fill: #ffffff;" +
-                "-fx-border-color: #116c75;";
+                "-fx-border-color: #116c75;" +
+                "-fx-border-width: 1px";
 
         //Buttons for navigating the application
         Button overviewButton = new Button("Oversikt");
@@ -505,6 +569,7 @@ public class MyApp extends Application {
             helpWindow.setVisible(false);
             overviewWindow.setVisible(true);
             incomeWindow.setVisible(false);
+            expensesWindow.setVisible(false);
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
@@ -536,6 +601,7 @@ public class MyApp extends Application {
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
+            expensesWindow.setVisible(false);
             overviewWindow.setVisible(false);
             helpWindow.setVisible(false);
             settingsWindow.setVisible(false);
@@ -559,7 +625,23 @@ public class MyApp extends Application {
         });
 
         expensesButton.setStyle(buttonStyle);
-        expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Utgifter"));
+        expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            titleText.setText("Utgifter");
+            incomeWindow.setVisible(false);
+            expensesWindow.setVisible(true);
+            overviewWindow.setVisible(false);
+            helpWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+            savingsWindow.setVisible(false);
+
+            overviewButton.setStyle(buttonStyle);
+            accountButton.setStyle(buttonStyle);
+            incomeButton.setStyle(buttonStyle);
+            expensesButton.setStyle(buttonHoverStyle);
+            savingsButton.setStyle(buttonStyle);
+            settingsButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);
+        });
         expensesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> expensesButton.setStyle(buttonHoverStyle));
         expensesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> expensesButton.setStyle(buttonStyle));
 
@@ -568,7 +650,7 @@ public class MyApp extends Application {
             titleText.setText("Sparemål");
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
-            //expensesWindow.setVisible(false);
+            expensesWindow.setVisible(false);
             savingsWindow.setVisible(true);
             helpWindow.setVisible(false);
             settingsWindow.setVisible(false);
@@ -583,6 +665,7 @@ public class MyApp extends Application {
             titleText.setText("Innstillinger");
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
+            expensesWindow.setVisible(false);
             helpWindow.setVisible(false);
             settingsWindow.setVisible(true);
             savingsWindow.setVisible(false);
@@ -609,6 +692,7 @@ public class MyApp extends Application {
             helpWindow.setVisible(true);
             overviewWindow.setVisible(false);
             incomeWindow.setVisible(false);
+            expensesWindow.setVisible(false);
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
@@ -654,6 +738,30 @@ public class MyApp extends Application {
 
             incomeSum.setText("");
             incomeName.setText("");
+
+        });
+
+        addExpensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+
+            userOneBudget.addExpense(expensesName.getText(), Integer.parseInt(expensesSum.getText()));
+
+
+            //PIECHART UPDATE
+            pieChartExpenses.set(FXCollections.observableArrayList());
+
+            for (BudgetItem expense : expenses){
+                pieChartExpenses.get().add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));
+            }
+            chart.setData(pieChartExpenses.get());
+
+            expensesPageData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesPageTableView.setItems(expensesPageData.get());
+            expensesPageData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesPageTableView.setItems(expensesPageData.get());
+
+
+            expensesSum.setText("");
+            expensesName.setText("");
 
         });
 

@@ -15,3 +15,5 @@ Income: Studielån
 Value: 8100.0
 Income: Deltidsjobb
 Value: 3000.0
+Expense: transport
+Value: 25000.0
