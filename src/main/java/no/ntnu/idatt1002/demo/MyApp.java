@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -20,6 +21,8 @@ import no.ntnu.idatt1002.demo.data.BudgetItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 /**
  * Use this class to start the application
@@ -65,6 +68,13 @@ public class MyApp extends Application {
                 "-fx-font-size: 18;" +
                 "-fx-font-weight: bold;" +
                 "-fx-text-fill: #ffffff;");
+
+        String classicButtonStyle = "-fx-background-color: #ffffff; " +
+                "-fx-border-color: #116c75;" +
+                "-fx-text-fill: #116c75;" +
+                "-fx-pref-width: 150;" +
+                "-fx-highlight-fill: #116c75;" +
+                "-fx-alignment: center;";
 
         //HBox for current page title
         HBox titleBox = new HBox();
@@ -143,6 +153,8 @@ public class MyApp extends Application {
         series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
         series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
 
+
+
         barChart.getData().add(series1);
         barChart.setTitle("Sum inntekt og utgifter");
         barChart.setStyle("-fx-background-color: #ffffff;" +
@@ -152,6 +164,11 @@ public class MyApp extends Application {
         barChart.setLegendVisible(false);
         barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
+        Node n = barChart.lookup(".data0.chart-bar");
+        n.setStyle("-fx-bar-fill: #2FC2A9");
+        n = barChart.lookup(".data1.chart-bar");
+        n.setStyle("-fx-bar-fill: #D03D56");
+
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
         HBox tableHBox = new HBox();
@@ -160,14 +177,14 @@ public class MyApp extends Application {
 
         //overviewWindow- TableView for viewing expenses
         TableView<BudgetItem> expensesTableView = new TableView<>();
-        ObservableList<BudgetItem> expensesData = FXCollections.observableArrayList(userOneBudget.getExpenseList());
+        AtomicReference<ObservableList<BudgetItem>> expensesData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
-        expensesTableView.setItems(expensesData);
+        expensesTableView.setItems(expensesData.get());
         sumColumn.setMinWidth(250);
 
         expensesTableView.getColumns().addAll(nameColumn, sumColumn);
@@ -223,7 +240,7 @@ public class MyApp extends Application {
                 "-fx-alignment: center;");
         Separator graphSeparator = new Separator();
         graphSeparator.setOrientation(Orientation.HORIZONTAL);
-        tableHBox.getChildren().addAll(expensesTableView, incomeTableView);
+        tableHBox.getChildren().addAll(incomeTableView, expensesTableView);
         tableHBox.setSpacing(45);
         tablePane.setTop(tableHBox);
         tablePane.setBottom(graphSeparator);
@@ -274,9 +291,34 @@ public class MyApp extends Application {
         incomePageTableView.setMaxHeight(200);
         incomePageTableView.setMinWidth(350);
 
+
+        Button removeIncomeButton = new Button("Fjern markert inntekt");
+        removeIncomeButton.setStyle(classicButtonStyle);
+        removeIncomeButton.setMinWidth(800);
+        removeIncomeButton.setOnAction(e -> {
+            BudgetItem selectedItem = incomePageTableView.getSelectionModel().getSelectedItem();
+            incomePageTableView.getItems().remove(selectedItem);
+            incomeTableView.getItems().remove(selectedItem);
+            userOneBudget.removeIncome(selectedItem.getBudgetItemName());
+
+            //UPDATING CHARTS
+            updateBarChart(userOneBudget, barChart, series1);
+
+        });
+
+        VBox tableViewBox = new VBox();
+        tableViewBox.setPadding(new Insets(50, 0, 0, 0));
+        tableViewBox.setSpacing(10);
+        tableViewBox.getChildren().addAll(incomePageTableView, removeIncomeButton);
+
         BorderPane incomeWindowElements = new BorderPane();
 
         HBox fieldBox = new HBox();
+        fieldBox.setStyle(
+                "-fx-padding: 15px;" +
+                "-fx-spacing: 10px;" +
+                "-fx-alignment: center;");
+        fieldBox.setPadding(new Insets(10, 10, 10, 10));
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
         incomeName.setPrefWidth(250);
@@ -285,19 +327,13 @@ public class MyApp extends Application {
         incomeSum.setPrefWidth(300);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
-        addIncomeButton.setStyle(
-                "-fx-background-color: #ffffff; " +
-                "-fx-border-color: #116c75;" +
-                "-fx-text-fill: #116c75;" +
-                "-fx-pref-width: 150;" +
-                "-fx-highlight-fill: #116c75;" +
-                "-fx-alignment: center;");
+        addIncomeButton.setStyle(classicButtonStyle);
 
         fieldBox.getChildren().addAll(incomeName, incomeSum, addIncomeButton);
         fieldBox.setAlignment(Pos.CENTER);
 
+        incomeWindowElements.setTop(tableViewBox);
         incomeWindowElements.setCenter(fieldBox);
-        incomeWindowElements.setTop(incomePageTableView);
 
 
         HBox incomeTitleBox = new HBox();
@@ -330,16 +366,43 @@ public class MyApp extends Application {
         TableColumn<BudgetItem, Double> sumExpensesPageColumn = new TableColumn<>("Sum (utgift)");
         sumExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
-        expensesPageTableView.setItems(expensesData);
+        expensesPageTableView.setItems(expensesData.get());
         sumExpensesPageColumn.setMinWidth(698);
 
         expensesPageTableView.getColumns().addAll(nameExpensesPageColumn, sumExpensesPageColumn);
         expensesPageTableView.setMaxHeight(200);
         expensesPageTableView.setMinWidth(350);
 
+        Button removeExpenseButton = new Button ("Fjern markert utgift");
+        removeExpenseButton.setStyle(classicButtonStyle);
+        removeExpenseButton.setMinWidth(800);
+        removeExpenseButton.setOnAction(e -> {
+            BudgetItem selectedItem = expensesPageTableView.getSelectionModel().getSelectedItem();
+            expensesPageTableView.getItems().remove(selectedItem);
+            expensesTableView.getItems().remove(selectedItem);
+            userOneBudget.removeExpense(selectedItem.getBudgetItemName());
+            //UPDATING CHARTS
+            updateBarChart(userOneBudget, barChart, series1);
+            pieChartExpenses.set(FXCollections.observableArrayList());
+            for (BudgetItem expense : expenses){pieChartExpenses.get().add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));}
+            chart.setData(pieChartExpenses.get());
+
+
+        });
+
+        VBox tableViewBox2 = new VBox();
+        tableViewBox2.setPadding(new Insets(50, 0, 0, 0));
+        tableViewBox2.setSpacing(10);
+        tableViewBox2.getChildren().addAll(expensesPageTableView, removeExpenseButton);
+
         BorderPane expensesWindowElements = new BorderPane();
 
         HBox fieldBox2 = new HBox();
+        fieldBox2.setStyle(
+                "-fx-padding: 15px;" +
+                        "-fx-spacing: 10px;" +
+                        "-fx-alignment: center;");
+        fieldBox2.setPadding(new Insets(10, 10, 10, 10));
         fieldBox2.setSpacing(10);
         TextField expensesName = new TextField();
         expensesName.setPrefWidth(250);
@@ -348,19 +411,13 @@ public class MyApp extends Application {
         expensesSum.setPrefWidth(300);
         expensesSum.setPromptText("Sum på utgift (eks.: 10000)");
         Button addExpensesButton = new Button("Legg til utgift");
-        addExpensesButton.setStyle(
-                "-fx-background-color: #ffffff; " +
-                        "-fx-border-color: #116c75;" +
-                        "-fx-text-fill: #116c75;" +
-                        "-fx-pref-width: 150;" +
-                        "-fx-highlight-fill: #116c75;" +
-                        "-fx-alignment: center;");
+        addExpensesButton.setStyle(classicButtonStyle);
 
         fieldBox2.getChildren().addAll(expensesName, expensesSum, addExpensesButton);
         fieldBox2.setAlignment(Pos.CENTER);
 
+        expensesWindowElements.setTop(tableViewBox2);
         expensesWindowElements.setCenter(fieldBox2);
-        expensesWindowElements.setTop(expensesPageTableView);
 
 
         HBox expensesTitleBox = new HBox();
@@ -724,11 +781,7 @@ public class MyApp extends Application {
             userOneBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
 
 
-            barChart.getData().remove(series1);
-            series1.getData().clear();
-            series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
-            series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
-            barChart.getData().add(series1);
+            updateBarChart(userOneBudget, barChart, series1);
 
             incomeData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
             incomeTableView.setItems(incomeData.get());
@@ -759,6 +812,11 @@ public class MyApp extends Application {
             expensesPageData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
             expensesPageTableView.setItems(expensesPageData.get());
 
+            expensesData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesTableView.setItems(expensesData.get());
+
+            updateBarChart(userOneBudget, barChart, series1);
+
 
             expensesSum.setText("");
             expensesName.setText("");
@@ -776,5 +834,13 @@ public class MyApp extends Application {
         stage.setTitle("Budsjettverktøy");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private void updateBarChart(Budget userOneBudget, BarChart<String, Number> barChart, XYChart.Series<String, Number> series1) {
+        barChart.getData().remove(series1);
+        series1.getData().clear();
+        series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
+        series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
+        barChart.getData().add(series1);
     }
 }
