@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 /**
  * Use this class to start the application
@@ -165,9 +164,9 @@ public class MyApp extends Application {
         barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         Node n = barChart.lookup(".data0.chart-bar");
-        n.setStyle("-fx-bar-fill: #2FC2A9");
+        n.setStyle("-fx-bar-fill: #398564");
         n = barChart.lookup(".data1.chart-bar");
-        n.setStyle("-fx-bar-fill: #D03D56");
+        n.setStyle("-fx-bar-fill: #e36700");
 
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
