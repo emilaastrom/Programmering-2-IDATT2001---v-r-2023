@@ -410,6 +410,10 @@ public class MyApp extends Application {
             pieChartExpenses.set(FXCollections.observableArrayList());
             for (BudgetItem expense : expenses){pieChartExpenses.get().add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));}
             chart.setData(pieChartExpenses.get());
+            Node b = barChart.lookup(".data0.chart-bar");
+            b.setStyle("-fx-bar-fill: #398564");
+            b = barChart.lookup(".data1.chart-bar");
+            b.setStyle("-fx-bar-fill: #e36700");
 
 
         });
@@ -849,6 +853,11 @@ public class MyApp extends Application {
 
             expensesSum.setText("");
             expensesName.setText("");
+
+            Node b = barChart.lookup(".data0.chart-bar");
+            b.setStyle("-fx-bar-fill: #398564");
+            b = barChart.lookup(".data1.chart-bar");
+            b.setStyle("-fx-bar-fill: #e36700");
 
         });
 
