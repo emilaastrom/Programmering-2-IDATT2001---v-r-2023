@@ -16,12 +16,30 @@ public class Budget {
         this.incomeList = new ArrayList<>();
         this.expenseList = new ArrayList<>();
 
+
         try {
-            BufferedWriter constructorWriter = new BufferedWriter(new FileWriter(username + "Budget.txt"));
-            if (!new File(username + "Budget.txt").isFile()){
+            File file = new File(username + "Budget.txt");
+            if (!file.exists()) {file.createNewFile();}
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line = reader.readLine();
+            ArrayList<String> lines = new ArrayList<>();
+
+            if (line == null || !line.contains("Budget for") || line.isBlank()) {
+                BufferedWriter constructorWriter = new BufferedWriter(new FileWriter(file));
+                System.out.println("File does not start with the expected line.");
+                System.out.println(reader.readLine());
                 constructorWriter.write("Budget for " + username + " created at " + Date.from(Instant.now()) + "\n");
+                constructorWriter.close();
+            } else {
+                System.out.println("File starts with the expected line.");
+                System.out.println("Existing data in the file:");
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
             }
-            constructorWriter.close();
+
+            reader.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -53,6 +71,16 @@ public class Budget {
             e.printStackTrace();
         }
 
+    }
+
+    public void addIncomeNotToFile(String income, double value){
+        BudgetItem newIncome = new BudgetItem(income, value);
+        incomeList.add(newIncome);
+    }
+
+    public void addExpenseNotToFile(String expense, double value){
+        BudgetItem newExpense = new BudgetItem(expense, value);
+        expenseList.add(newExpense);
     }
 
     public void addExpense(String expense, double value) {
@@ -109,17 +137,20 @@ public class Budget {
                     PrintWriter pw = new PrintWriter(new FileWriter(tempFile));
 
                     if (!inFile.isFile()) {
-                        System.out.println("Parameter is not an existing file");
+                        System.out.println("The file does not exist!");
                         return;
                     }
 
-                    String line = null;
+                    String line;
 
                     //Read from the original file and write to the new
                     //unless content matches data to be removed.
                     while ((line = br.readLine()) != null) {
-
-                        if (!line.trim().equals(income)) {
+                        if (line.replaceFirst("Income: ", "").trim().equals(income)) {
+                            br.readLine();
+                        } else if(line.isBlank()){
+                            line = br.readLine();
+                        } else {
                             pw.println(line);
                             pw.flush();
                         }
@@ -139,9 +170,11 @@ public class Budget {
 
                 }
                 catch (FileNotFoundException ex) {
+                    System.out.println("File not found!");
                     ex.printStackTrace();
                 }
                 catch (IOException ex) {
+                    System.out.println("IO Exception!");
                     ex.printStackTrace();
                 }
                 break;
@@ -166,13 +199,17 @@ public class Budget {
                         return;
                     }
 
-                    String line = null;
+                    String line;
 
                     //Read from the original file and write to the new
                     //unless content matches data to be removed.
                     while ((line = br.readLine()) != null) {
 
-                        if (!line.trim().equals(expense)) {
+                        if (line.replaceFirst("Expense: ", "").trim().equals(expense)) {
+                            br.readLine();
+                        } else if(line.isBlank()){
+                            br.readLine();
+                        } else {
                             pw.println(line);
                             pw.flush();
                         }
