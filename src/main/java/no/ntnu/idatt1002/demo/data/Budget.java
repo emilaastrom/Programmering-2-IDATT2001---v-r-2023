@@ -146,8 +146,9 @@ public class Budget {
                     //Read from the original file and write to the new
                     //unless content matches data to be removed.
                     while ((line = br.readLine()) != null) {
-
-                        if (!line.replaceFirst("Income: ", "").trim().equals(income)) {
+                        if (line.replaceFirst("Income: ", "").trim().equals(income)) {
+                            br.readLine();
+                        } else {
                             pw.println(line);
                             pw.flush();
                         }
@@ -196,13 +197,15 @@ public class Budget {
                         return;
                     }
 
-                    String line = null;
+                    String line;
 
                     //Read from the original file and write to the new
                     //unless content matches data to be removed.
                     while ((line = br.readLine()) != null) {
 
-                        if (!line.replaceFirst("Expense: ", "").trim().equals(expense)) {
+                        if (line.replaceFirst("Expense: ", "").trim().equals(expense)) {
+                            br.readLine();
+                        } else {
                             pw.println(line);
                             pw.flush();
                         }
