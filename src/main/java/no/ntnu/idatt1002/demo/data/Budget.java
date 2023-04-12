@@ -148,6 +148,8 @@ public class Budget {
                     while ((line = br.readLine()) != null) {
                         if (line.replaceFirst("Income: ", "").trim().equals(income)) {
                             br.readLine();
+                        } else if(line.isBlank()){
+                            line = br.readLine();
                         } else {
                             pw.println(line);
                             pw.flush();
@@ -204,6 +206,8 @@ public class Budget {
                     while ((line = br.readLine()) != null) {
 
                         if (line.replaceFirst("Expense: ", "").trim().equals(expense)) {
+                            br.readLine();
+                        } else if(line.isBlank()){
                             br.readLine();
                         } else {
                             pw.println(line);
