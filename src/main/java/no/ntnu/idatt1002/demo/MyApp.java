@@ -18,8 +18,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.BudgetItem;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -38,22 +41,40 @@ public class MyApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //Disabled FXML SceneBuilder - Loading the FXML file
-        //FXMLLoader fxmlLoader = new FXMLLoader(MyApp.class.getResource("main.fxml"));
-        //Setting and displaying the scene (FXML SceneBuilder)
-        //Scene scene = new Scene(fxmlLoader.load(), 800, 600);
 
-
-        //Temprary test data V2
         Budget userOneBudget = new Budget("OlaNordmann");
-        userOneBudget.addExpense("Mat", 3500);
+        //Temprary test data V2
+/*        userOneBudget.addExpense("Mat", 3500);
         userOneBudget.addExpense("Transport", 600);
         userOneBudget.addExpense("Bolig", 5000);
         userOneBudget.addExpense("Fritid", 500);
         userOneBudget.addExpense("Klær", 1000);
         userOneBudget.addExpense("Helse", 1000);
         userOneBudget.addIncome("Studielån", 8100);
-        userOneBudget.addIncome("Deltidsjobb", 3000);
+        userOneBudget.addIncome("Deltidsjobb", 3000);*/
+
+        //READ USERS DATA FROM FILE
+        //TODO userOneBudget.readUserDataFromFile(user);
+        String user = "OlaNordmann";
+
+        Scanner scanner = new Scanner(new File(user + "Budget.txt"));
+        ArrayList<String> fileData = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            fileData.add(scanner.nextLine());
+        }
+        scanner.close();
+        for (String line : fileData) {
+            if (line.startsWith("Income: ")){
+                String income = line.substring(8);
+                String value = fileData.get(fileData.indexOf(line) + 1).substring(7);
+                userOneBudget.addIncomeNotToFile(income, Double.parseDouble(value));
+            }else if (line.startsWith("Expense: ")){
+                String expense = line.substring(9);
+                String value = fileData.get(fileData.indexOf(line) + 1).substring(7);
+                userOneBudget.addExpenseNotToFile(expense, Double.parseDouble(value));
+            }
+        }
+
 
 
         BorderPane root = new BorderPane();
