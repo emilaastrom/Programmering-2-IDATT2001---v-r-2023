@@ -42,19 +42,19 @@ public class MyApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Budget userOneBudget = new Budget("OlaNordmann");
+        Budget userBudget = new Budget("OlaNordmann");
         //Temprary test data V2
-/*        userOneBudget.addExpense("Mat", 3500);
-        userOneBudget.addExpense("Transport", 600);
-        userOneBudget.addExpense("Bolig", 5000);
-        userOneBudget.addExpense("Fritid", 500);
-        userOneBudget.addExpense("Klær", 1000);
-        userOneBudget.addExpense("Helse", 1000);
-        userOneBudget.addIncome("Studielån", 8100);
-        userOneBudget.addIncome("Deltidsjobb", 3000);*/
+/*        userBudget.addExpense("Mat", 3500);
+        userBudget.addExpense("Transport", 600);
+        userBudget.addExpense("Bolig", 5000);
+        userBudget.addExpense("Fritid", 500);
+        userBudget.addExpense("Klær", 1000);
+        userBudget.addExpense("Helse", 1000);
+        userBudget.addIncome("Studielån", 8100);
+        userBudget.addIncome("Deltidsjobb", 3000);*/
 
         //READ USERS DATA FROM FILE
-        //TODO userOneBudget.readUserDataFromFile(user);
+        //TODO userBudget.readUserDataFromFile(user);
         String user = "OlaNordmann";
 
         Scanner scanner = new Scanner(new File(user + "Budget.txt"));
@@ -67,11 +67,11 @@ public class MyApp extends Application {
             if (line.startsWith("Income: ")){
                 String income = line.substring(8);
                 String value = fileData.get(fileData.indexOf(line) + 1).substring(7);
-                userOneBudget.addIncomeNotToFile(income, Double.parseDouble(value));
+                userBudget.addIncomeNotToFile(income, Double.parseDouble(value));
             }else if (line.startsWith("Expense: ")){
                 String expense = line.substring(9);
                 String value = fileData.get(fileData.indexOf(line) + 1).substring(7);
-                userOneBudget.addExpenseNotToFile(expense, Double.parseDouble(value));
+                userBudget.addExpenseNotToFile(expense, Double.parseDouble(value));
             }
         }
 
@@ -112,7 +112,7 @@ public class MyApp extends Application {
         topBoxPane.setPadding(new Insets(10, 10, 10, 10));
 
         Text topBoxText = new Text();
-        topBoxText.setText("Velkommen, " + userOneBudget.getUsername());
+        topBoxText.setText("Velkommen, " + userBudget.getUsername());
         topBoxText.setFill(Color.BLACK);
         topBoxText.setStyle("-fx-padding: 10");
         topBoxPane.setLeft(topBoxText);
@@ -138,7 +138,7 @@ public class MyApp extends Application {
                 "-fx-alignment: center;" +
                 "-fx-max-height: 350px;");
 
-        ArrayList<BudgetItem> expenses = userOneBudget.getExpenseList();
+        ArrayList<BudgetItem> expenses = userBudget.getExpenseList();
         int expenseCount = expenses.size();
         //overviewWindow- PieChart overview of expenses
         AtomicReference<ObservableList<PieChart.Data>> pieChartExpenses = new AtomicReference<>(FXCollections.observableArrayList());
@@ -170,8 +170,8 @@ public class MyApp extends Application {
 
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         //series1.setName("Inntekter og utgifter");
-        series1.getData().add(new XYChart.Data<>("Inntekter", userOneBudget.getTotalIncome()));
-        series1.getData().add(new XYChart.Data<>("Utgifter", userOneBudget.getTotalExpense()));
+        series1.getData().add(new XYChart.Data<>("Inntekter", userBudget.getTotalIncome()));
+        series1.getData().add(new XYChart.Data<>("Utgifter", userBudget.getTotalExpense()));
 
 
 
@@ -184,10 +184,10 @@ public class MyApp extends Application {
         barChart.setLegendVisible(false);
         barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Node n = barChart.lookup(".data0.chart-bar");
-        n.setStyle("-fx-bar-fill: #398564");
-        n = barChart.lookup(".data1.chart-bar");
-        n.setStyle("-fx-bar-fill: #e36700");
+        AtomicReference<Node> n = new AtomicReference<>(barChart.lookup(".data0.chart-bar"));
+        n.get().setStyle("-fx-bar-fill: #398564");
+        n.set(barChart.lookup(".data1.chart-bar"));
+        n.get().setStyle("-fx-bar-fill: #e36700");
 
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
@@ -197,7 +197,7 @@ public class MyApp extends Application {
 
         //overviewWindow- TableView for viewing expenses
         TableView<BudgetItem> expensesTableView = new TableView<>();
-        AtomicReference<ObservableList<BudgetItem>> expensesData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+        AtomicReference<ObservableList<BudgetItem>> expensesData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.setMinWidth(100);
@@ -215,7 +215,7 @@ public class MyApp extends Application {
 
         //overviewWindow- TableView for viewing incomes
         TableView<BudgetItem> incomeTableView = new TableView<>();
-        AtomicReference<ObservableList<BudgetItem>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+        AtomicReference<ObservableList<BudgetItem>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomeColumn = new TableColumn<>("Navn");
         nameIncomeColumn.setMinWidth(100);
@@ -295,7 +295,7 @@ public class MyApp extends Application {
 
         //incomeWindow- TableView for viewing incomes
         TableView<BudgetItem> incomePageTableView = new TableView<>();
-        AtomicReference<ObservableList<BudgetItem>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+        AtomicReference<ObservableList<BudgetItem>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomePageColumn = new TableColumn<>("Navn");
         nameIncomePageColumn.setMinWidth(100);
@@ -319,10 +319,14 @@ public class MyApp extends Application {
             BudgetItem selectedItem = incomePageTableView.getSelectionModel().getSelectedItem();
             incomePageTableView.getItems().remove(selectedItem);
             incomeTableView.getItems().remove(selectedItem);
-            userOneBudget.removeIncome(selectedItem.getBudgetItemName());
+            userBudget.removeIncome(selectedItem.getBudgetItemName());
 
             //UPDATING CHARTS
-            updateBarChart(userOneBudget, barChart, series1);
+            updateBarChart(userBudget, barChart, series1);
+            Node b = barChart.lookup(".data0.chart-bar");
+            b.setStyle("-fx-bar-fill: #398564");
+            b = barChart.lookup(".data1.chart-bar");
+            b.setStyle("-fx-bar-fill: #e36700");
 
         });
 
@@ -377,7 +381,7 @@ public class MyApp extends Application {
 
         //expensesWindow- TableView for viewing incomes
         TableView<BudgetItem> expensesPageTableView = new TableView<>();
-        AtomicReference<ObservableList<BudgetItem>> expensesPageData = new AtomicReference<>(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+        AtomicReference<ObservableList<BudgetItem>> expensesPageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameExpensesPageColumn = new TableColumn<>("Navn");
         nameExpensesPageColumn.setMinWidth(100);
@@ -400,9 +404,9 @@ public class MyApp extends Application {
             BudgetItem selectedItem = expensesPageTableView.getSelectionModel().getSelectedItem();
             expensesPageTableView.getItems().remove(selectedItem);
             expensesTableView.getItems().remove(selectedItem);
-            userOneBudget.removeExpense(selectedItem.getBudgetItemName());
+            userBudget.removeExpense(selectedItem.getBudgetItemName());
             //UPDATING CHARTS
-            updateBarChart(userOneBudget, barChart, series1);
+            updateBarChart(userBudget, barChart, series1);
             pieChartExpenses.set(FXCollections.observableArrayList());
             for (BudgetItem expense : expenses){pieChartExpenses.get().add(new PieChart.Data(expense.getBudgetItemName(), expense.getBudgetItemValue()));}
             chart.setData(pieChartExpenses.get());
@@ -798,25 +802,30 @@ public class MyApp extends Application {
 
         addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
-            userOneBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
+            userBudget.addIncome(incomeName.getText(), Integer.parseInt(incomeSum.getText()));
 
 
-            updateBarChart(userOneBudget, barChart, series1);
+            updateBarChart(userBudget, barChart, series1);
 
-            incomeData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+            incomeData.set(FXCollections.observableArrayList(userBudget.getIncomeList()));
             incomeTableView.setItems(incomeData.get());
-            incomePageData.set(FXCollections.observableArrayList(userOneBudget.getIncomeList()));
+            incomePageData.set(FXCollections.observableArrayList(userBudget.getIncomeList()));
             incomePageTableView.setItems(incomePageData.get());
 
 
             incomeSum.setText("");
             incomeName.setText("");
 
+            n.set(barChart.lookup(".data0.chart-bar"));
+            n.get().setStyle("-fx-bar-fill: #398564");
+            n.set(barChart.lookup(".data1.chart-bar"));
+            n.get().setStyle("-fx-bar-fill: #e36700");
+
         });
 
         addExpensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
-            userOneBudget.addExpense(expensesName.getText(), Integer.parseInt(expensesSum.getText()));
+            userBudget.addExpense(expensesName.getText(), Integer.parseInt(expensesSum.getText()));
 
 
             //PIECHART UPDATE
@@ -827,15 +836,15 @@ public class MyApp extends Application {
             }
             chart.setData(pieChartExpenses.get());
 
-            expensesPageData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesPageData.set(FXCollections.observableArrayList(userBudget.getExpenseList()));
             expensesPageTableView.setItems(expensesPageData.get());
-            expensesPageData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesPageData.set(FXCollections.observableArrayList(userBudget.getExpenseList()));
             expensesPageTableView.setItems(expensesPageData.get());
 
-            expensesData.set(FXCollections.observableArrayList(userOneBudget.getExpenseList()));
+            expensesData.set(FXCollections.observableArrayList(userBudget.getExpenseList()));
             expensesTableView.setItems(expensesData.get());
 
-            updateBarChart(userOneBudget, barChart, series1);
+            updateBarChart(userBudget, barChart, series1);
 
 
             expensesSum.setText("");
