@@ -45,13 +45,14 @@ public class MyApp extends Application {
     public void start(Stage stage) throws Exception {
 
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
+        root.getStyleClass().addAll("root", "borderpane");
+//        root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
 
         Scene mainScene = new Scene(root, 1000  , 750);
 
         BorderPane loginRoot = new BorderPane();
         BorderPane loginWindow = new BorderPane();
-        loginRoot.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
+//        loginRoot.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
         Scene loginScene = new Scene(loginRoot, 500, 500);
 
 
@@ -74,6 +75,7 @@ public class MyApp extends Application {
 
         selectAccountText.addEventHandler(KeyEvent.ANY, event -> user.set(accountSelection.getText()));
 
+        String currentStylesheet = "file:src/main/resources/style.css";
 
         selectUser(stage, mainScene);
 
@@ -83,6 +85,7 @@ public class MyApp extends Application {
                 Scene2 userScene;
                 try {
                     userScene = new Scene2(user.get());
+                    userScene.getStylesheets().add(currentStylesheet);
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -95,6 +98,7 @@ public class MyApp extends Application {
             Scene2 userScene;
             try {
                 userScene = new Scene2(user.get());
+                userScene.getStylesheets().add(currentStylesheet);
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -110,6 +114,8 @@ public class MyApp extends Application {
 
 
 
+        mainScene.getStylesheets().add("file:src/main/resources/style.css");
+        loginScene.getStylesheets().add("file:src/main/resources/style.css");
 
         stage.setTitle("Budsjettverktøy");
         stage.setScene(loginScene);
@@ -178,7 +184,7 @@ class Scene2 extends Scene {
         titleText.setUnderline(true);
 
         titleBox.setAlignment(javafx.geometry.Pos.CENTER);
-        titleBox.setStyle("-fx-background-color: rgba(79,110,57,0.7);" + "-fx-padding: 10;");
+        //titleBox.setStyle("-fx-background-color: rgba(79,110,57,0.7);" + "-fx-padding: 10;");
         titleBox.getChildren().add(titleText);
 
         BorderPane topBoxPane = new BorderPane();
@@ -188,7 +194,7 @@ class Scene2 extends Scene {
         Text topBoxText = new Text();
         topBoxText.setText("Velkommen, " + userBudget.getUsername().substring(0, 1).toUpperCase() + userBudget.getUsername().substring(1));
         topBoxText.setFill(Color.BLACK);
-        topBoxText.setStyle("-fx-padding: 10");
+        //topBoxText.setStyle("-fx-padding: 10");
         topBoxPane.setLeft(topBoxText);
 
         root.setTop(topBoxPane);
@@ -199,18 +205,20 @@ class Scene2 extends Scene {
 
         //overviewWindow- TilePane for content of overview page
         BorderPane overviewWindow = new BorderPane();
-        overviewWindow.setStyle("-fx-background-color: rgb(255,255,255, 1);" +
+        overviewWindow.getStyleClass().add("borderpane");
+/*        overviewWindow.setStyle("-fx-background-color: rgb(255,255,255, 1);" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         //overviewWindow- HBox to contain different graphs
         HBox graphsBox = new HBox();
-        graphsBox.setStyle("-fx-background-color: #ffffff;" +
+        graphsBox.getStyleClass().add("graphsbox");
+/*        graphsBox.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 20px;" +
                 "-fx-alignment: center;" +
-                "-fx-max-height: 350px;");
+                "-fx-max-height: 350px;");*/
 
         ArrayList<BudgetItem> expenses = userBudget.getExpenseList();
         int expenseCount = expenses.size();
@@ -223,6 +231,7 @@ class Scene2 extends Scene {
 
 
         final PieChart chart = new PieChart(pieChartExpenses.get());
+        chart.getStyleClass().add("piechart");
         chart.setTitle("Dine utgifter");
         chart.setLegendVisible(false);
         chart.setMaxHeight(250);
@@ -238,6 +247,7 @@ class Scene2 extends Scene {
 
 
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.getStyleClass().add("barchart");
         barChart.setTitle("Inntekter og utgifter");
         barChart.setMaxHeight(250);
 
@@ -251,12 +261,13 @@ class Scene2 extends Scene {
 
         barChart.getData().add(series1);
         barChart.setTitle("Sum inntekt og utgifter");
-        barChart.setStyle("-fx-background-color: #ffffff;" +
+/*        barChart.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 10px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
         barChart.setLegendVisible(false);
-        barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        barChart.getStyleClass().add("bar-chart");
+//        barChart.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 
         AtomicReference<Node> n = new AtomicReference<>(barChart.lookup(".data0.chart-bar"));
         n.get().setStyle("-fx-bar-fill: #398564");
@@ -265,15 +276,18 @@ class Scene2 extends Scene {
 
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
+        tablePane.getStyleClass().add("borderpane");
         HBox tableHBox = new HBox();
         tablePane.setTop(tableHBox);
 
 
         //overviewWindow- TableView for viewing expenses
         TableView<BudgetItem> expensesTableView = new TableView<>();
+        expensesTableView.getStyleClass().add("tableview");
         AtomicReference<ObservableList<BudgetItem>> expensesData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
+        nameColumn.getStyleClass().add("tablecolumn");
         nameColumn.setMinWidth(100);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
@@ -309,16 +323,16 @@ class Scene2 extends Scene {
         //overviewWindow- Text for top of overview page
         HBox titleOverviewPane = new HBox();
         Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
-        overviewTitle.setStyle(underTitleStyle);
+//        overviewTitle.setStyle(underTitleStyle);
         titleOverviewPane.setAlignment(Pos.CENTER);
         titleOverviewPane.getChildren().add(overviewTitle);
 
         //overviewWindow- Text for bottom of overview page
         HBox underOverviewPane = new HBox();
         Text underOverviewText = new Text("\nDersom du ønsker å legge til en utgift eller inntekt, bruk navigasjonsmenyen til venstre.\n");
-        underOverviewText.setStyle(
+/*        underOverviewText.setStyle(
                 "-fx-font-size: 15;" +
-                        "-fx-font-weight: bold;");
+                        "-fx-font-weight: bold;");*/
         underOverviewPane.getChildren().add(underOverviewText);
         underOverviewPane.setAlignment(Pos.CENTER);
 
@@ -326,12 +340,12 @@ class Scene2 extends Scene {
         HBox topOverviewPane = new HBox();
         topOverviewPane.setSpacing(50);
         topOverviewPane.autosize();
-        topOverviewPane.setStyle("-fx-border-color: #ffffff;" +
+/*        topOverviewPane.setStyle("-fx-border-color: #ffffff;" +
                 "-fx-border-width: 1px;" +
                 "-fx-border-radius: 5px;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
         Separator graphSeparator = new Separator();
         graphSeparator.setOrientation(Orientation.HORIZONTAL);
         tableHBox.getChildren().addAll(incomeTableView, expensesTableView);
@@ -360,10 +374,11 @@ class Scene2 extends Scene {
 
         //Pane for income window
         BorderPane incomeWindow = new BorderPane();
-        incomeWindow.setStyle("-fx-background-color: #ffffff;" +
+        incomeWindow.getStyleClass().add("borderpane");
+/*        incomeWindow.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         //Elements for income window
 
@@ -387,7 +402,7 @@ class Scene2 extends Scene {
 
 
         Button removeIncomeButton = new Button("Fjern markert inntekt");
-        removeIncomeButton.setStyle(classicButtonStyle);
+//        removeIncomeButton.setStyle(classicButtonStyle);
         removeIncomeButton.setMinWidth(800);
         removeIncomeButton.setOnAction(e -> {
             BudgetItem selectedItem = incomePageTableView.getSelectionModel().getSelectedItem();
@@ -410,12 +425,13 @@ class Scene2 extends Scene {
         tableViewBox.getChildren().addAll(incomePageTableView, removeIncomeButton);
 
         BorderPane incomeWindowElements = new BorderPane();
+        incomeWindowElements.getStyleClass().add("borderpane");
 
         HBox fieldBox = new HBox();
-        fieldBox.setStyle(
+/*        fieldBox.setStyle(
                 "-fx-padding: 15px;" +
                         "-fx-spacing: 10px;" +
-                        "-fx-alignment: center;");
+                        "-fx-alignment: center;");*/
         fieldBox.setPadding(new Insets(10, 10, 10, 10));
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
@@ -425,7 +441,7 @@ class Scene2 extends Scene {
         incomeSum.setPrefWidth(300);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
-        addIncomeButton.setStyle(classicButtonStyle);
+//        addIncomeButton.setStyle(classicButtonStyle);
 
         fieldBox.getChildren().addAll(incomeName, incomeSum, addIncomeButton);
         fieldBox.setAlignment(Pos.CENTER);
@@ -436,7 +452,7 @@ class Scene2 extends Scene {
 
         HBox incomeTitleBox = new HBox();
         Text incomeTitle = new Text("\nVelkommen til inntektsiden, her kan du legge til inntekter!\n");
-        incomeTitle.setStyle(underTitleStyle);
+//        incomeTitle.setStyle(underTitleStyle);
         incomeTitleBox.getChildren().add(incomeTitle);
         incomeTitleBox.setAlignment(Pos.CENTER);
         incomeWindow.setTop(incomeTitleBox);
@@ -446,10 +462,11 @@ class Scene2 extends Scene {
 
         //Pane for expenses window
         BorderPane expensesWindow = new BorderPane();
-        expensesWindow.setStyle("-fx-background-color: #ffffff;" +
+        expensesWindow.getStyleClass().add("borderpane");
+/*        expensesWindow.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         //Elements for expenses window
 
@@ -472,7 +489,7 @@ class Scene2 extends Scene {
         expensesPageTableView.setMinWidth(350);
 
         Button removeExpenseButton = new Button ("Fjern markert utgift");
-        removeExpenseButton.setStyle(classicButtonStyle);
+//        removeExpenseButton.setStyle(classicButtonStyle);
         removeExpenseButton.setMinWidth(800);
         removeExpenseButton.setOnAction(e -> {
             BudgetItem selectedItem = expensesPageTableView.getSelectionModel().getSelectedItem();
@@ -498,12 +515,13 @@ class Scene2 extends Scene {
         tableViewBox2.getChildren().addAll(expensesPageTableView, removeExpenseButton);
 
         BorderPane expensesWindowElements = new BorderPane();
+        expensesWindowElements.getStyleClass().add("borderpane");
 
         HBox fieldBox2 = new HBox();
-        fieldBox2.setStyle(
+/*        fieldBox2.setStyle(
                 "-fx-padding: 15px;" +
                         "-fx-spacing: 10px;" +
-                        "-fx-alignment: center;");
+                        "-fx-alignment: center;");*/
         fieldBox2.setPadding(new Insets(10, 10, 10, 10));
         fieldBox2.setSpacing(10);
         TextField expensesName = new TextField();
@@ -513,7 +531,7 @@ class Scene2 extends Scene {
         expensesSum.setPrefWidth(300);
         expensesSum.setPromptText("Sum på utgift (eks.: 10000)");
         Button addExpensesButton = new Button("Legg til utgift");
-        addExpensesButton.setStyle(classicButtonStyle);
+//        addExpensesButton.setStyle(classicButtonStyle);
 
         fieldBox2.getChildren().addAll(expensesName, expensesSum, addExpensesButton);
         fieldBox2.setAlignment(Pos.CENTER);
@@ -524,7 +542,7 @@ class Scene2 extends Scene {
 
         HBox expensesTitleBox = new HBox();
         Text expensesTitle = new Text("\nVelkommen til utgiftssiden, her kan du legge til utgifter!\n");
-        expensesTitle.setStyle(underTitleStyle);
+//        expensesTitle.setStyle(underTitleStyle);
         expensesTitleBox.getChildren().add(expensesTitle);
         expensesTitleBox.setAlignment(Pos.CENTER);
         expensesWindow.setTop(expensesTitleBox);
@@ -534,19 +552,20 @@ class Scene2 extends Scene {
 
         //settingsWindow -Pane for settings window
         BorderPane settingsWindow = new BorderPane();
-        settingsWindow.setStyle("-fx-background-color: #ffffff;" +
+        settingsWindow.getStyleClass().add("borderpane");
+/*        settingsWindow.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         //settingsWindow -Elements for settings window
         VBox topElementsSettings = new VBox();
         topElementsSettings.setAlignment(Pos.CENTER);
 
         Text settingsTopText = new Text("\nVelkommen til innstillingsiden, her kan du endre på innstillinger!\n");
-        settingsTopText.setStyle(
+/*        settingsTopText.setStyle(
                 "-fx-font-size: 20;" +
-                        "-fx-font-weight: bold;");
+                        "-fx-font-weight: bold;");*/
 
         topElementsSettings.getChildren().addAll(settingsTopText);
 
@@ -554,20 +573,20 @@ class Scene2 extends Scene {
         settingsMiddleBox.setSpacing(50);
         settingsMiddleBox.setAlignment(Pos.CENTER);
         Button settingsOptionsTextOne = new Button("Ønsker du å endre navn på en bruker?");
-        settingsOptionsTextOne.setStyle("-fx-background-color: #ffffff;" +
+/*        settingsOptionsTextOne.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-border-color: #116c75;" +
                 "-fx-font-size: 15;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
-        settingsOptionsTextTwo.setStyle("-fx-background-color: #ffffff;" +
+/*        settingsOptionsTextTwo.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-border-color: #116c75;" +
                 "-fx-font-size: 15;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
         settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
 
         //settingsWindow - General settings
@@ -579,17 +598,18 @@ class Scene2 extends Scene {
         //savingsWindow - Pane for savings window
 
         BorderPane savingsWindow = new BorderPane();
+        savingsWindow.getStyleClass().add("borderpane");
 
-        savingsWindow.setStyle("-fx-background-color: #ffffff;" +
+/*        savingsWindow.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
 
         //savingsWindow - Elements for savings window
         VBox savingsWindowTopBox = new VBox();
         savingsWindowTopBox.setAlignment(Pos.CENTER);
         Text savingsWindowTitle = new Text("Her kan du definere sparemål.");
-        savingsWindowTitle.setStyle(underTitleStyle);
+//        savingsWindowTitle.setStyle(underTitleStyle);
         savingsWindowTopBox.getChildren().add(savingsWindowTitle);
 
         VBox savingsWindowMiddleBox = new VBox();
@@ -622,13 +642,13 @@ class Scene2 extends Scene {
         savingsSum.setPrefWidth(300);
         savingsSum.setPromptText("Sum på sparemål (eks.: 30000)");
         Button addSavingsButton = new Button("Legg til sparemål");
-        addSavingsButton.setStyle(
+/*        addSavingsButton.setStyle(
                 "-fx-background-color: #ffffff; " +
                         "-fx-border-color: #116c75;" +
                         "-fx-text-fill: #116c75;" +
                         "-fx-pref-width: 150;" +
                         "-fx-highlight-fill: #116c75;" +
-                        "-fx-alignment: center;");
+                        "-fx-alignment: center;");*/
         savingsWindowBottomBox.getChildren().addAll(savingsName, savingsSum, addSavingsButton);
 
         savingsWindow.setTop(savingsWindowTopBox);
@@ -639,14 +659,15 @@ class Scene2 extends Scene {
 
         //Pane for help window
         BorderPane helpWindow = new BorderPane();
-        helpWindow.setStyle("-fx-background-color: #ffffff;" +
+        helpWindow.getStyleClass().add("borderpane");
+/*        helpWindow.setStyle("-fx-background-color: #ffffff;" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
         VBox helpWindowTopBox = new VBox();
         helpWindowTopBox.setAlignment(Pos.CENTER);
         Text helpWindowTitle = new Text("Her kan du få hjelp til å bruke programmet.");
-        helpWindowTitle.setStyle(underTitleStyle);
+//        helpWindowTitle.setStyle(underTitleStyle);
         helpWindowTopBox.getChildren().add(helpWindowTitle);
         Text helpText = new Text("""
                 Ofte stilte spørsmål::
@@ -667,7 +688,7 @@ class Scene2 extends Scene {
         feedbackField.setMaxWidth(600);
         feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
         Button feedbackButton = new Button("Send tilbakemelding");
-        feedbackButton.setStyle("-fx-font-size: 16;" +
+/*        feedbackButton.setStyle("-fx-font-size: 16;" +
                 "-fx-background-color: #ffffff; " +
                 "-fx-border-color: #116c75;" +
                 "-fx-background-radius: 5px;" +
@@ -675,7 +696,7 @@ class Scene2 extends Scene {
                 "-fx-pref-width: 150;" +
                 "-fx-pref-height: 50;" +
                 "-fx-highlight-fill: #116c75;" +
-                "-fx-alignment: center;");
+                "-fx-alignment: center;");*/
         feedbackButton.setAlignment(Pos.CENTER);
         feedbackButton.setMinWidth(250);
         feedbackButton.autosize();
@@ -689,7 +710,7 @@ class Scene2 extends Scene {
 
         //VBox for navigation menu on the left side of the window
         VBox navigationMenu = new VBox();
-        navigationMenu.setStyle("-fx-background-color: rgba(100,148,76,0.38);" + "-fx-padding: 10;");
+//        navigationMenu.setStyle("-fx-background-color: rgba(100,148,76,0.38);" + "-fx-padding: 10;");
         navigationMenu.setSpacing(5);
         String buttonStyle = "-fx-font-size: 16;" +
                 "-fx-background-color: #ffffff; " +
@@ -721,9 +742,9 @@ class Scene2 extends Scene {
         Button settingsButton = new Button("Innstillinger");
         Button helpButton = new Button("Hjelp");
 
-        overviewButton.setStyle(buttonStyle);
+//        overviewButton.setStyle(buttonStyle);
         overviewButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            overviewButton.setStyle(buttonHoverStyle);
+//            overviewButton.setStyle(buttonHoverStyle);
             titleText.setText("Oversikt");
             helpWindow.setVisible(false);
             overviewWindow.setVisible(true);
@@ -732,31 +753,31 @@ class Scene2 extends Scene {
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
-            overviewButton.setStyle(buttonHoverStyle);
+/*            overviewButton.setStyle(buttonHoverStyle);
             accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
             settingsButton.setStyle(buttonStyle);
-            helpButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);*/
         });
-        overviewButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> overviewButton.setStyle(buttonHoverStyle));
+/*        overviewButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> overviewButton.setStyle(buttonHoverStyle));
         overviewButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             if (!overviewWindow.isVisible()) {
                 overviewButton.setStyle(buttonStyle);
             }
 
-        });
+        });*/
 
-        //Initializing to hoverstyle as default
+/*        //Initializing to hoverstyle as default
         overviewButton.setStyle(buttonHoverStyle);
 
-        accountButton.setStyle(buttonStyle);
+        accountButton.setStyle(buttonStyle);*/
         accountButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Konto"));
-        accountButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> accountButton.setStyle(buttonHoverStyle));
-        accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));
+/*        accountButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> accountButton.setStyle(buttonHoverStyle));
+        accountButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> accountButton.setStyle(buttonStyle));*/
 
-        incomeButton.setStyle(buttonStyle);
+//        incomeButton.setStyle(buttonStyle);
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
@@ -766,24 +787,24 @@ class Scene2 extends Scene {
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
-            overviewButton.setStyle(buttonStyle);
+/*            overviewButton.setStyle(buttonStyle);
             accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonHoverStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
             settingsButton.setStyle(buttonStyle);
-            helpButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);*/
 
         });
-        incomeButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> incomeButton.setStyle(buttonHoverStyle));
+/*        incomeButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> incomeButton.setStyle(buttonHoverStyle));
         incomeButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             if (!incomeWindow.isVisible()) {
                 incomeButton.setStyle(buttonStyle);
             }
 
-        });
+        });*/
 
-        expensesButton.setStyle(buttonStyle);
+//        expensesButton.setStyle(buttonStyle);
         expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Utgifter");
             incomeWindow.setVisible(false);
@@ -793,18 +814,18 @@ class Scene2 extends Scene {
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
-            overviewButton.setStyle(buttonStyle);
+/*            overviewButton.setStyle(buttonStyle);
             accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonHoverStyle);
             savingsButton.setStyle(buttonStyle);
             settingsButton.setStyle(buttonStyle);
-            helpButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);*/
         });
-        expensesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> expensesButton.setStyle(buttonHoverStyle));
-        expensesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> expensesButton.setStyle(buttonStyle));
+/*        expensesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> expensesButton.setStyle(buttonHoverStyle));
+        expensesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> expensesButton.setStyle(buttonStyle));*/
 
-        savingsButton.setStyle(buttonStyle);
+//        savingsButton.setStyle(buttonStyle);
         savingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Sparemål");
             overviewWindow.setVisible(false);
@@ -816,10 +837,10 @@ class Scene2 extends Scene {
 
 
         });
-        savingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> savingsButton.setStyle(buttonHoverStyle));
-        savingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> savingsButton.setStyle(buttonStyle));
+/*        savingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> savingsButton.setStyle(buttonHoverStyle));
+        savingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> savingsButton.setStyle(buttonStyle));*/
 
-        settingsButton.setStyle(buttonStyle);
+//        settingsButton.setStyle(buttonStyle);
         settingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Innstillinger");
             overviewWindow.setVisible(false);
@@ -829,23 +850,23 @@ class Scene2 extends Scene {
             settingsWindow.setVisible(true);
             savingsWindow.setVisible(false);
 
-            overviewButton.setStyle(buttonStyle);
+/*            overviewButton.setStyle(buttonStyle);
             accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
             settingsButton.setStyle(buttonHoverStyle);
-            helpButton.setStyle(buttonStyle);
+            helpButton.setStyle(buttonStyle);*/
         });
-        settingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> settingsButton.setStyle(buttonHoverStyle));
+/*        settingsButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> settingsButton.setStyle(buttonHoverStyle));
         settingsButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             if (!settingsWindow.isVisible()) {
                 settingsButton.setStyle(buttonStyle);
             }
 
-        });
+        });*/
 
-        helpButton.setStyle(buttonStyle);
+//        helpButton.setStyle(buttonStyle);
         helpButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Hjelp");
             helpWindow.setVisible(true);
@@ -855,28 +876,28 @@ class Scene2 extends Scene {
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
 
-            overviewButton.setStyle(buttonStyle);
+/*            overviewButton.setStyle(buttonStyle);
             accountButton.setStyle(buttonStyle);
             incomeButton.setStyle(buttonStyle);
             expensesButton.setStyle(buttonStyle);
             savingsButton.setStyle(buttonStyle);
             settingsButton.setStyle(buttonStyle);
-            helpButton.setStyle(buttonHoverStyle);
+            helpButton.setStyle(buttonHoverStyle);*/
 
         });
-        helpButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> helpButton.setStyle(buttonHoverStyle));
+/*        helpButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> helpButton.setStyle(buttonHoverStyle));
         helpButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             if (!helpWindow.isVisible()) {
                 helpButton.setStyle(buttonStyle);
             }
 
-        });
+        });*/
 
         Button loggUtButton = new Button("Logg ut");
-        loggUtButton.setStyle(buttonStyle);
+//        loggUtButton.setStyle(buttonStyle);
         loggUtButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> System.exit(0));
-        loggUtButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> loggUtButton.setStyle(buttonHoverStyle));
-        loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));
+        /*loggUtButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> loggUtButton.setStyle(buttonHoverStyle));
+        loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));*/
 
         addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
