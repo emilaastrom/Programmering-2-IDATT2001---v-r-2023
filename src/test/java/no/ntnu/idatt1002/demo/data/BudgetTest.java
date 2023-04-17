@@ -14,6 +14,12 @@ class BudgetTest {
     @BeforeEach
     void setUp() {
         testBudget = new Budget("testUser");
+        testBudget.removeIncome("Jobb");
+        testBudget.removeIncome("Ekstrajobb");
+        testBudget.removeExpense("Mat");
+        testBudget.removeExpense("Bolig");
+        testBudget.removeExpense("Transport");
+
         testBudget.addIncome("Jobb", 25000);
         testBudget.addIncome("Ekstrajobb", 10000);
         testBudget.addExpense("Mat", 5000);
