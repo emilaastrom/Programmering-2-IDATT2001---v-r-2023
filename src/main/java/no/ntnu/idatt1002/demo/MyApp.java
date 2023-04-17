@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -18,7 +20,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.BudgetItem;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,62 @@ public class MyApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Budget userBudget = new Budget("OlaNordmann");
+
+
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
+
+        Scene mainScene = new Scene(root, 1000  , 750);
+
+
+        BorderPane loginRoot = new BorderPane();
+        BorderPane loginWindow = new BorderPane();
+        loginRoot.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
+        Scene loginScene = new Scene(loginRoot, 500, 500);
+
+
+
+        Text selectAccountText = new Text("Skriv ditt navn for å velge/opprette en bruker");
+
+        VBox accountSelectionBox = new VBox();
+        TextField accountSelection = new TextField();
+        accountSelection.setMaxWidth(250);
+        Button velgBruker = new Button("Velg bruker");
+        accountSelectionBox.getChildren().addAll(selectAccountText, accountSelection, velgBruker);
+        accountSelectionBox.setAlignment(Pos.CENTER);
+        accountSelectionBox.setPadding(new Insets(10, 10, 10, 10));
+        accountSelectionBox.setSpacing(10);
+
+        loginWindow.setCenter(accountSelectionBox);
+        loginRoot.setCenter(loginWindow);
+
+        //READ USERS DATA FROM FILE
+        AtomicReference<String> user = new AtomicReference<>("TEST USER");
+
+        selectAccountText.addEventHandler(KeyEvent.ANY, event -> {
+            user.set(accountSelection.getText());
+        });
+
+        Budget userBudget = new Budget(user.get());
+        selectUser(stage, mainScene, accountSelection);
+
+        accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                user.set(accountSelection.getText());
+                stage.setScene(mainScene);
+            }
+        });
+
+        velgBruker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            user.set(accountSelection.getText());
+            stage.setScene(mainScene);
+        });
+
+
+
+
+
+        //Budget userBudget = new Budget("TEMPUSER");
         //Temprary test data V2
 /*        userBudget.addExpense("Mat", 3500);
         userBudget.addExpense("Transport", 600);
@@ -53,9 +109,6 @@ public class MyApp extends Application {
         userBudget.addIncome("Studielån", 8100);
         userBudget.addIncome("Deltidsjobb", 3000);*/
 
-        //READ USERS DATA FROM FILE
-        //TODO userBudget.readUserDataFromFile(user);
-        String user = "OlaNordmann";
 
         Scanner scanner = new Scanner(new File(user + "Budget.txt"));
         ArrayList<String> fileData = new ArrayList<>();
@@ -77,8 +130,6 @@ public class MyApp extends Application {
 
 
 
-        BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
 
         String underTitleStyle = (
                 "-fx-font-size: 18;" +
@@ -125,7 +176,7 @@ public class MyApp extends Application {
 
         //overviewWindow- TilePane for content of overview page
         BorderPane overviewWindow = new BorderPane();
-        overviewWindow.setStyle("-fx-background-color: #ffffff;" +
+        overviewWindow.setStyle("-fx-background-color: rgb(255,255,255, 1);" +
                 "-fx-padding: 15px;" +
                 "-fx-spacing: 10px;" +
                 "-fx-alignment: center;");
@@ -861,6 +912,7 @@ public class MyApp extends Application {
 
         });
 
+
         navigationMenu.isFillWidth();
         navigationMenu.getChildren().addAll(overviewButton, accountButton, incomeButton
         , expensesButton, savingsButton, settingsButton, helpButton, loggUtButton);
@@ -868,9 +920,15 @@ public class MyApp extends Application {
         root.setCenter(windowPane);
 
 
-        Scene scene = new Scene(root, 1000  , 750);
+
         stage.setTitle("Budsjettverktøy");
-        stage.setScene(scene);
+        stage.setScene(loginScene);
+        stage.show();
+    }
+
+    private void selectUser(Stage stage, Scene mainScene, TextField accountSelection) {
+
+        stage.setScene(mainScene);
         stage.show();
     }
 
