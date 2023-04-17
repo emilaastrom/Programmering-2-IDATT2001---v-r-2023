@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.BudgetItem;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -43,19 +44,15 @@ public class MyApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-
-
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
 
         Scene mainScene = new Scene(root, 1000  , 750);
 
-
         BorderPane loginRoot = new BorderPane();
         BorderPane loginWindow = new BorderPane();
         loginRoot.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
         Scene loginScene = new Scene(loginRoot, 500, 500);
-
 
 
         Text selectAccountText = new Text("Skriv ditt navn for å velge/opprette en bruker");
@@ -75,41 +72,67 @@ public class MyApp extends Application {
         //READ USERS DATA FROM FILE
         AtomicReference<String> user = new AtomicReference<>("TEST USER");
 
-        selectAccountText.addEventHandler(KeyEvent.ANY, event -> {
-            user.set(accountSelection.getText());
-        });
+        selectAccountText.addEventHandler(KeyEvent.ANY, event -> user.set(accountSelection.getText()));
 
-        Budget userBudget = new Budget(user.get());
-        selectUser(stage, mainScene, accountSelection);
+
+        selectUser(stage, mainScene);
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 user.set(accountSelection.getText());
-                stage.setScene(mainScene);
+                Scene2 userScene;
+                try {
+                    userScene = new Scene2(user.get());
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                stage.setScene(userScene);
             }
         });
 
         velgBruker.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             user.set(accountSelection.getText());
-            stage.setScene(mainScene);
+            Scene2 userScene;
+            try {
+                userScene = new Scene2(user.get());
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            stage.setScene(userScene);
         });
 
 
 
 
 
-        //Budget userBudget = new Budget("TEMPUSER");
-        //Temprary test data V2
-/*        userBudget.addExpense("Mat", 3500);
-        userBudget.addExpense("Transport", 600);
-        userBudget.addExpense("Bolig", 5000);
-        userBudget.addExpense("Fritid", 500);
-        userBudget.addExpense("Klær", 1000);
-        userBudget.addExpense("Helse", 1000);
-        userBudget.addIncome("Studielån", 8100);
-        userBudget.addIncome("Deltidsjobb", 3000);*/
 
 
+
+
+
+
+        stage.setTitle("Budsjettverktøy");
+        stage.setScene(loginScene);
+        stage.show();
+    }
+
+    private void selectUser(Stage stage, Scene mainScene) {
+        stage.setScene(mainScene);
+        stage.show();
+    }
+
+
+}
+
+class Scene2 extends Scene {
+
+    public Scene2(String username) throws FileNotFoundException {
+        super(new BorderPane(), 1000, 750);
+        BorderPane root = (BorderPane) this.getRoot();
+
+        Budget userBudget = new Budget(username);
+
+        String user = userBudget.getUsername();
         Scanner scanner = new Scanner(new File(user + "Budget.txt"));
         ArrayList<String> fileData = new ArrayList<>();
         while (scanner.hasNextLine()) {
@@ -133,12 +156,12 @@ public class MyApp extends Application {
 
         String underTitleStyle = (
                 "-fx-font-size: 18;" +
-                "-fx-font-weight: bold;");
+                        "-fx-font-weight: bold;");
 
         String welcomeTextStyle = (
                 "-fx-font-size: 18;" +
-                "-fx-font-weight: bold;" +
-                "-fx-text-fill: #ffffff;");
+                        "-fx-font-weight: bold;" +
+                        "-fx-text-fill: #ffffff;");
 
         String classicButtonStyle = "-fx-background-color: #ffffff; " +
                 "-fx-border-color: #116c75;" +
@@ -163,7 +186,7 @@ public class MyApp extends Application {
         topBoxPane.setPadding(new Insets(10, 10, 10, 10));
 
         Text topBoxText = new Text();
-        topBoxText.setText("Velkommen, " + userBudget.getUsername());
+        topBoxText.setText("Velkommen, " + userBudget.getUsername().substring(0, 1).toUpperCase() + userBudget.getUsername().substring(1));
         topBoxText.setFill(Color.BLACK);
         topBoxText.setStyle("-fx-padding: 10");
         topBoxPane.setLeft(topBoxText);
@@ -295,7 +318,7 @@ public class MyApp extends Application {
         Text underOverviewText = new Text("\nDersom du ønsker å legge til en utgift eller inntekt, bruk navigasjonsmenyen til venstre.\n");
         underOverviewText.setStyle(
                 "-fx-font-size: 15;" +
-                "-fx-font-weight: bold;");
+                        "-fx-font-weight: bold;");
         underOverviewPane.getChildren().add(underOverviewText);
         underOverviewPane.setAlignment(Pos.CENTER);
 
@@ -391,8 +414,8 @@ public class MyApp extends Application {
         HBox fieldBox = new HBox();
         fieldBox.setStyle(
                 "-fx-padding: 15px;" +
-                "-fx-spacing: 10px;" +
-                "-fx-alignment: center;");
+                        "-fx-spacing: 10px;" +
+                        "-fx-alignment: center;");
         fieldBox.setPadding(new Insets(10, 10, 10, 10));
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
@@ -523,7 +546,7 @@ public class MyApp extends Application {
         Text settingsTopText = new Text("\nVelkommen til innstillingsiden, her kan du endre på innstillinger!\n");
         settingsTopText.setStyle(
                 "-fx-font-size: 20;" +
-                "-fx-font-weight: bold;");
+                        "-fx-font-weight: bold;");
 
         topElementsSettings.getChildren().addAll(settingsTopText);
 
@@ -601,11 +624,11 @@ public class MyApp extends Application {
         Button addSavingsButton = new Button("Legg til sparemål");
         addSavingsButton.setStyle(
                 "-fx-background-color: #ffffff; " +
-                "-fx-border-color: #116c75;" +
-                "-fx-text-fill: #116c75;" +
-                "-fx-pref-width: 150;" +
-                "-fx-highlight-fill: #116c75;" +
-                "-fx-alignment: center;");
+                        "-fx-border-color: #116c75;" +
+                        "-fx-text-fill: #116c75;" +
+                        "-fx-pref-width: 150;" +
+                        "-fx-highlight-fill: #116c75;" +
+                        "-fx-alignment: center;");
         savingsWindowBottomBox.getChildren().addAll(savingsName, savingsSum, addSavingsButton);
 
         savingsWindow.setTop(savingsWindowTopBox);
@@ -915,21 +938,9 @@ public class MyApp extends Application {
 
         navigationMenu.isFillWidth();
         navigationMenu.getChildren().addAll(overviewButton, accountButton, incomeButton
-        , expensesButton, savingsButton, settingsButton, helpButton, loggUtButton);
+                , expensesButton, savingsButton, settingsButton, helpButton, loggUtButton);
         root.setLeft(navigationMenu);
         root.setCenter(windowPane);
-
-
-
-        stage.setTitle("Budsjettverktøy");
-        stage.setScene(loginScene);
-        stage.show();
-    }
-
-    private void selectUser(Stage stage, Scene mainScene, TextField accountSelection) {
-
-        stage.setScene(mainScene);
-        stage.show();
     }
 
     private void updateBarChart(Budget userOneBudget, BarChart<String, Number> barChart, XYChart.Series<String, Number> series1) {
