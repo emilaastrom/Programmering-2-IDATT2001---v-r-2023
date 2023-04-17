@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -30,7 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Use this class to start the application
- * @author nilstes
+ * @author
  */
 public class MyApp extends Application {
 
@@ -45,10 +46,14 @@ public class MyApp extends Application {
     public void start(Stage stage) throws Exception {
 
         BorderPane root = new BorderPane();
+        Scene scene = new Scene(root, 1000  , 750);
+        stage.setTitle("Budsjettverkt;y");
+        stage.setScene(scene);
+        stage.show();
         root.getStyleClass().addAll("root", "borderpane");
 //        root.setStyle("-fx-background-color: rgba(100,148,76,0.38)");
 
-        Scene mainScene = new Scene(root, 1000  , 750);
+
 
         BorderPane loginRoot = new BorderPane();
         BorderPane loginWindow = new BorderPane();
@@ -77,7 +82,7 @@ public class MyApp extends Application {
 
         String currentStylesheet = "file:src/main/resources/style.css";
 
-        selectUser(stage, mainScene);
+        selectUser(stage, scene);
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -114,7 +119,7 @@ public class MyApp extends Application {
 
 
 
-        mainScene.getStylesheets().add("file:src/main/resources/style.css");
+        scene.getStylesheets().add("file:src/main/resources/style.css");
         loginScene.getStylesheets().add("file:src/main/resources/style.css");
 
         stage.setTitle("Budsjettverktøy");
@@ -893,11 +898,43 @@ class Scene2 extends Scene {
 
         });*/
 
+        Stage logOutAlert = new Stage();
+        logOutAlert.setTitle("Logg ut");
+
+        Label logOutTitle = new Label("Er du sikker på at du ønsker å logge ut?");
+
+        Button confirmLogOut = new Button("Logg ut");
+        confirmLogOut.setStyle(buttonStyle);
+        confirmLogOut.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> confirmLogOut.setStyle(buttonHoverStyle));
+        confirmLogOut.addEventHandler(MouseEvent.MOUSE_EXITED, event -> confirmLogOut.setStyle(buttonStyle));
+        confirmLogOut.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                System.exit(0);
+            }
+        });
+
+
+        VBox container = new VBox(logOutTitle, confirmLogOut);
+
+        container.setSpacing(15);
+        container.setPadding(new Insets(25));
+        container.setAlignment(Pos.CENTER);
+
+        logOutAlert.setScene(new Scene(container));
+
+
+
+
         Button loggUtButton = new Button("Logg ut");
-//        loggUtButton.setStyle(buttonStyle);
-        loggUtButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> System.exit(0));
-        /*loggUtButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> loggUtButton.setStyle(buttonHoverStyle));
-        loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));*/
+        loggUtButton.setStyle(buttonStyle);
+        loggUtButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> loggUtButton.setStyle(buttonHoverStyle));
+        loggUtButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> loggUtButton.setStyle(buttonStyle));
+        loggUtButton.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                logOutAlert.show();
+            }
+        });
+
 
         addIncomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
@@ -963,7 +1000,6 @@ class Scene2 extends Scene {
         root.setLeft(navigationMenu);
         root.setCenter(windowPane);
     }
-
     private void updateBarChart(Budget userOneBudget, BarChart<String, Number> barChart, XYChart.Series<String, Number> series1) {
         barChart.getData().remove(series1);
         series1.getData().clear();
