@@ -58,13 +58,13 @@ public class Budget {
 
     public void addIncome(String income, double value) {
 
-        BudgetItem newIncome = new BudgetItem(income, value);
+        BudgetItem newIncome = new BudgetItem(income.substring(0, 1).toUpperCase() + income.substring(1), value);
         incomeList.add(newIncome);
 
         try {
             BufferedWriter myWriter = new BufferedWriter(new FileWriter(username + "Budget.txt", true));
             myWriter.newLine();
-            myWriter.write("Income: " + income + "\nValue: " + value);
+            myWriter.write("Income: " + income.substring(0, 1).toUpperCase() + income.substring(1).toLowerCase() + "\nValue: " + value);
             myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
@@ -74,23 +74,23 @@ public class Budget {
     }
 
     public void addIncomeNotToFile(String income, double value){
-        BudgetItem newIncome = new BudgetItem(income, value);
+        BudgetItem newIncome = new BudgetItem(income.substring(0, 1).toUpperCase() + income.substring(1), value);
         incomeList.add(newIncome);
     }
 
     public void addExpenseNotToFile(String expense, double value){
-        BudgetItem newExpense = new BudgetItem(expense, value);
+        BudgetItem newExpense = new BudgetItem(expense.substring(0, 1).toUpperCase() + expense.substring(1), value);
         expenseList.add(newExpense);
     }
 
     public void addExpense(String expense, double value) {
-        BudgetItem newExpense = new BudgetItem(expense, value);
+        BudgetItem newExpense = new BudgetItem(expense.substring(0, 1).toUpperCase() + expense.substring(1), value);
         expenseList.add(newExpense);
 
         try {
             BufferedWriter myWriter = new BufferedWriter(new FileWriter(username + "Budget.txt", true));
             myWriter.newLine();
-            myWriter.write("Expense: " + expense + "\nValue: " + value);
+            myWriter.write("Expense: " + expense.substring(0,1).toUpperCase() + expense.substring(1) + "\nValue: " + value);
             myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
