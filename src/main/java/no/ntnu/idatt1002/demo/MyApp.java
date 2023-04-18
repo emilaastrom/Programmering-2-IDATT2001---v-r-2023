@@ -62,8 +62,11 @@ public class MyApp extends Application {
 
 
         Text selectAccountText = new Text("Skriv ditt navn for å velge/opprette en bruker");
+        selectAccountText.getStyleClass().add("vanliginformasjonstekst");
 
         VBox accountSelectionBox = new VBox();
+        accountSelectionBox.getStyleClass().add("loginPageBox");
+        accountSelectionBox.setId("loginPageBox");
         TextField accountSelection = new TextField();
         accountSelection.setMaxWidth(250);
         Button velgBruker = new Button("Velg bruker");
@@ -81,7 +84,8 @@ public class MyApp extends Application {
         selectAccountText.addEventHandler(KeyEvent.ANY, event -> user.set(accountSelection.getText()));
 
         String currentStylesheet = "file:src/main/resources/style.css";
-
+        loginScene.getStylesheets().removeAll();
+        loginScene.getStylesheets().add(currentStylesheet);
         selectUser(stage, scene);
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -109,15 +113,6 @@ public class MyApp extends Application {
             }
             stage.setScene(userScene);
         });
-
-
-
-
-
-
-
-
-
 
         scene.getStylesheets().add("file:src/main/resources/style.css");
         loginScene.getStylesheets().add("file:src/main/resources/style.css");
@@ -193,14 +188,17 @@ class Scene2 extends Scene {
         titleBox.getChildren().add(titleText);
 
         BorderPane topBoxPane = new BorderPane();
+        topBoxPane.setId("radtoppen");
         topBoxPane.setPrefHeight(30);
         topBoxPane.setPadding(new Insets(10, 10, 10, 10));
 
         Text topBoxText = new Text();
         topBoxText.setText("Velkommen, " + userBudget.getUsername().substring(0, 1).toUpperCase() + userBudget.getUsername().substring(1));
         topBoxText.setFill(Color.BLACK);
+        topBoxText.getStyleClass().add("brukernavn");
+        topBoxText.setId("brukernavn");
         //topBoxText.setStyle("-fx-padding: 10");
-        topBoxPane.setLeft(topBoxText);
+        topBoxPane.setRight(topBoxText);
 
         root.setTop(topBoxPane);
 
@@ -264,6 +262,7 @@ class Scene2 extends Scene {
 
 
 
+
         barChart.getData().add(series1);
         barChart.setTitle("Sum inntekt og utgifter");
 /*        barChart.setStyle("-fx-background-color: #ffffff;" +
@@ -281,7 +280,6 @@ class Scene2 extends Scene {
 
         //Pane for tableViews
         BorderPane tablePane = new BorderPane();
-        tablePane.getStyleClass().add("borderpane");
         HBox tableHBox = new HBox();
         tablePane.setTop(tableHBox);
 
@@ -298,11 +296,11 @@ class Scene2 extends Scene {
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
         expensesTableView.setItems(expensesData.get());
-        sumColumn.setMinWidth(250);
+        sumColumn.setMinWidth(281);
 
         expensesTableView.getColumns().addAll(nameColumn, sumColumn);
         expensesTableView.setMaxHeight(200);
-        expensesTableView.setMinWidth(350);
+        expensesTableView.setPrefWidth(400);
 
 
 
@@ -327,7 +325,9 @@ class Scene2 extends Scene {
 
         //overviewWindow- Text for top of overview page
         HBox titleOverviewPane = new HBox();
-        Text overviewTitle = new Text("\nVelkommen til oversikten, her kan du få et kjapt overblikk over registrert informasjon!\n");
+        titleOverviewPane.setId("titleOverviewPane");
+        Text overviewTitle = new Text("\n Oversikten: her kan du få et kjapt overblikk over registrert informasjon!\n");
+        overviewTitle.getStyleClass().add("vanliginformasjonstekst");
 //        overviewTitle.setStyle(underTitleStyle);
         titleOverviewPane.setAlignment(Pos.CENTER);
         titleOverviewPane.getChildren().add(overviewTitle);
@@ -335,6 +335,8 @@ class Scene2 extends Scene {
         //overviewWindow- Text for bottom of overview page
         HBox underOverviewPane = new HBox();
         Text underOverviewText = new Text("\nDersom du ønsker å legge til en utgift eller inntekt, bruk navigasjonsmenyen til venstre.\n");
+        underOverviewText.getStyleClass().add("vanliginformasjonstekst");
+        underOverviewText.setId("overviewtekstnederst");
 /*        underOverviewText.setStyle(
                 "-fx-font-size: 15;" +
                         "-fx-font-weight: bold;");*/
@@ -343,8 +345,7 @@ class Scene2 extends Scene {
 
         //overviewWindow- Pane for tableview
         HBox topOverviewPane = new HBox();
-        topOverviewPane.setSpacing(50);
-        topOverviewPane.autosize();
+        topOverviewPane.getStyleClass().add("overviewtableviewbox");
 /*        topOverviewPane.setStyle("-fx-border-color: #ffffff;" +
                 "-fx-border-width: 1px;" +
                 "-fx-border-radius: 5px;" +
@@ -433,6 +434,7 @@ class Scene2 extends Scene {
         incomeWindowElements.getStyleClass().add("borderpane");
 
         HBox fieldBox = new HBox();
+        fieldBox.setId("fieldbox");
 /*        fieldBox.setStyle(
                 "-fx-padding: 15px;" +
                         "-fx-spacing: 10px;" +
@@ -456,7 +458,9 @@ class Scene2 extends Scene {
 
 
         HBox incomeTitleBox = new HBox();
-        Text incomeTitle = new Text("\nVelkommen til inntektsiden, her kan du legge til inntekter!\n");
+        incomeTitleBox.setId("incomeTitleBox");
+        Text incomeTitle = new Text("\nInntekter: her kan du legge til inntekter!\n");
+        incomeTitle.getStyleClass().add("vanliginformasjonstekst");
 //        incomeTitle.setStyle(underTitleStyle);
         incomeTitleBox.getChildren().add(incomeTitle);
         incomeTitleBox.setAlignment(Pos.CENTER);
@@ -523,6 +527,7 @@ class Scene2 extends Scene {
         expensesWindowElements.getStyleClass().add("borderpane");
 
         HBox fieldBox2 = new HBox();
+        fieldBox2.setId("fieldbox");
 /*        fieldBox2.setStyle(
                 "-fx-padding: 15px;" +
                         "-fx-spacing: 10px;" +
@@ -546,7 +551,9 @@ class Scene2 extends Scene {
 
 
         HBox expensesTitleBox = new HBox();
-        Text expensesTitle = new Text("\nVelkommen til utgiftssiden, her kan du legge til utgifter!\n");
+        expensesTitleBox.setId("incomeTitleBox");
+        Text expensesTitle = new Text("\nUtgifter: her kan du legge til utgifter!\n");
+        expensesTitle.getStyleClass().add("vanliginformasjonstekst");
 //        expensesTitle.setStyle(underTitleStyle);
         expensesTitleBox.getChildren().add(expensesTitle);
         expensesTitleBox.setAlignment(Pos.CENTER);
@@ -567,7 +574,8 @@ class Scene2 extends Scene {
         VBox topElementsSettings = new VBox();
         topElementsSettings.setAlignment(Pos.CENTER);
 
-        Text settingsTopText = new Text("\nVelkommen til innstillingsiden, her kan du endre på innstillinger!\n");
+        Text settingsTopText = new Text("\nInnstillinger: her kan du endre på innstillinger!\n");
+        settingsTopText.getStyleClass().add("vanliginformasjonstekst");
 /*        settingsTopText.setStyle(
                 "-fx-font-size: 20;" +
                         "-fx-font-weight: bold;");*/
@@ -715,6 +723,7 @@ class Scene2 extends Scene {
 
         //VBox for navigation menu on the left side of the window
         VBox navigationMenu = new VBox();
+        navigationMenu.setId("navigationMenu");
 //        navigationMenu.setStyle("-fx-background-color: rgba(100,148,76,0.38);" + "-fx-padding: 10;");
         navigationMenu.setSpacing(5);
         String buttonStyle = "-fx-font-size: 16;" +
