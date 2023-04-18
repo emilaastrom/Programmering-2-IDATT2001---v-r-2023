@@ -4,13 +4,17 @@
     -fx-border-color: #000000;
 }
 
+.brukernavn{
+    -fx-font-size: 20;
+}
+
 .borderpane{
-    -fx-background-color: #ffffff;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
 }
 
 .root{
-    -fx-background: rgb(2,0,36);
-    -fx-background-color: linear-gradient(from 25px 25px to 500px 500px, rgba(66, 127, 88, 0.8), rgba(66, 127, 88, 0.5));
+    -fx-background: rgb(255, 255, 255);
+    -fx-background-color: linear-gradient(from 25px 25px to 500px 500px, rgba(66, 127, 88, 0.4), rgba(66, 127, 88, 0.2));
 }
 
 .barchart{
@@ -18,21 +22,24 @@
     -fx-padding: 10px;
     -fx-spacing: 10px;
     -fx-alignment: center;
-    -fx-text-fill: #0b0b0b;
+}
+
+.label {
+    -fx-text-fill: #000000;
 }
 
 .barchart .chart-plot-background{
     -fx-background-color: transparent;
 }
 
-.barchart .text{
+.barchart .chart-vertical-grid-lines{
     -fx-fill: #0b0b0b;
     -fx-font-size: 20;
 }
 
 
 .button{
-    -fx-background-color: rgba(17, 117, 19, 0.45);
+    -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-fill: #000000;
     -fx-text-fill: #000000;
     -fx-background-radius: 100;
@@ -40,53 +47,69 @@
     -fx-font-weight: bold;
     -fx-padding: 10 20 10 20;
     -fx-border-width: 0.5;
-    -fx-border-radius: 10;
+    -fx-border-radius: 20;
     -fx-alignment: center;
+    -fx-background-radius: 20;
 }
 
 
 .button:hover{
-    -fx-background-color: rgba(255, 255, 255, 0.38);
+    -fx-background-color: rgb(255, 255, 255);
     -fx-text-fill: #282828;
 }
 
 .button:pressed{
-    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-text-fill: #282828;
 }
 
 .graphsbox{
-    -fx-background-color: rgba(175, 241, 141, 0.38);
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+.chart{
+    -fx-background-color: rgba(0, 0, 0, 0);
     -fx-padding: 10px;
     -fx-spacing: 10px;
     -fx-alignment: center;
 }
 
-.table-view{
+HBox {
+    -fx-text-fill: #000000;
+    -fx-fill-width: true;
+}
+
+VBox {
+    -fx-fill-width: true;
+    -fx-alignment: top-center;
+}
+
+.loginPageBox{
+    -fx-alignment: center;
     -fx-background-color: transparent;
-    -fx-border-width: 2;
+}
+
+.table-view{
+    -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-text-fill: #000000;
 }
 
 .table-view .column-header-background .filler {
     -fx-background-color: transparent;
 }
-.table-view .corner {
-    -fx-background-color: transparent;
-}
 
-.table-view .column-header-background{
-    -fx-background-color: linear-gradient(to bottom, #1dbbdd44, #93f9b944);
+.table-view .column-header{
     -fx-background-radius: 7px 7px 0px 0px;
     -fx-background-insets: 0 11px 0 0;
     -fx-padding: 0 0 5px 0;
     -fx-text-fill: #000000;
 }
 
-.table-view .table-cell{
-    -fx-border-color: transparent;
-    -fx-padding: 2 0 2 10px;
+.table-view .corner {
+    -fx-background-color: transparent;
 }
+
 .table-row-cell:hover {
     -fx-background-color: rgba(0, 183, 69, 0.07);
     -fx-text-background-color: red;
@@ -102,14 +125,28 @@
     -fx-padding: 0.0em;
 }
 
+.overviewtableviewbox{
+    -fx-text-fill: #000000;
+    -fx-spacing: 50px;
+    -fx-alignment: center;
+}
+
+.tick-label{
+    -fx-text-fill: #000000;
+}
 
 .piechart{
-    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-color: rgba(0, 0, 0, 0);
     -fx-padding: 10px;
     -fx-spacing: 10px;
     -fx-alignment: center;
 }
+
 .piechart .text {
-    -fx-fill: #0b0b0b;
+    -fx-fill: #000000;
+    -fx-font-size: 20;
+}
+.vanliginformasjonstekst{
+    -fx-text-fill: #000000;
     -fx-font-size: 20;
 }
