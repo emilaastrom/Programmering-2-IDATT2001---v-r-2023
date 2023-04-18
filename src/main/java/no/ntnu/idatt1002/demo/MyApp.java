@@ -86,7 +86,7 @@ public class MyApp extends Application {
         String currentStylesheet = "file:src/main/resources/style.css";
         loginScene.getStylesheets().removeAll();
         loginScene.getStylesheets().add(currentStylesheet);
-        selectUser(stage, mainScene);
+        selectUser(stage, scene);
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -114,7 +114,7 @@ public class MyApp extends Application {
             stage.setScene(userScene);
         });
 
-        mainScene.getStylesheets().add("file:src/main/resources/style.css");
+        scene.getStylesheets().add("file:src/main/resources/style.css");
         loginScene.getStylesheets().add("file:src/main/resources/style.css");
 
         stage.setTitle("Budsjettverktøy");
