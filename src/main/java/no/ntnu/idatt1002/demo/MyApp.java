@@ -76,24 +76,53 @@ public class MyApp extends Application {
         accountSelectionBox.setId("loginPageBox");
         TextField accountSelection = new TextField();
         accountSelection.setMaxWidth(250);
-        Button velgBruker = new Button("Velg bruker");
+        Button velgBruker = new Button("Logg inn på valgt bruker");
+        velgBruker.setId("velgbrukerknapp");
         accountSelectionBox.getChildren().addAll(selectAccountText, accountSelection, velgBruker);
         accountSelectionBox.setAlignment(Pos.CENTER);
         accountSelectionBox.setPadding(new Insets(10, 10, 10, 10));
         accountSelectionBox.setSpacing(10);
 
         loginWindow.setCenter(accountSelectionBox);
+
+        HBox themeButtons = new HBox();
+        themeButtons.setAlignment(Pos.CENTER);
+        themeButtons.setSpacing(10);
+        themeButtons.setPadding(new Insets(10, 10, 10, 10));
+        Button defaultThemeButton = new Button("Lys");
+        Button darkThemeButton = new Button("Mørk");
+        Button highContrastButton = new Button("Høy-kontrast");
+        themeButtons.getChildren().addAll(defaultThemeButton, darkThemeButton, highContrastButton);
+
+
         loginRoot.setCenter(loginWindow);
+        loginRoot.setBottom(themeButtons);
 
         //READ USERS DATA FROM FILE
         AtomicReference<String> user = new AtomicReference<>("TEST USER");
 
         selectAccountText.addEventHandler(KeyEvent.ANY, event -> user.set(accountSelection.getText()));
 
-        String currentStylesheet = "file:src/main/resources/style.css";
+        AtomicReference<String> currentStylesheet = new AtomicReference<>("file:src/main/resources/style.css");
         loginScene.getStylesheets().removeAll();
-        loginScene.getStylesheets().add(currentStylesheet);
+        loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
         selectUser(stage, scene);
+
+        defaultThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            currentStylesheet.set("file:src/main/resources/style.css");
+            loginScene.getStylesheets().clear();
+            loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+        });
+        darkThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            currentStylesheet.set("file:src/main/resources/darkmode.css");
+            loginScene.getStylesheets().clear();
+            loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+        });
+        highContrastButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            currentStylesheet.set("file:src/main/resources/highcontrast.css");
+            loginScene.getStylesheets().clear();
+            loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+        });
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -101,7 +130,8 @@ public class MyApp extends Application {
                 Scene2 userScene;
                 try {
                     userScene = new Scene2(user.get());
-                    userScene.getStylesheets().add(currentStylesheet);
+                    userScene.getStylesheets().removeAll();
+                    userScene.getStylesheets().add(String.valueOf(currentStylesheet));
                 } catch (FileNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -114,15 +144,16 @@ public class MyApp extends Application {
             Scene2 userScene;
             try {
                 userScene = new Scene2(user.get());
-                userScene.getStylesheets().add(currentStylesheet);
+                userScene.getStylesheets().removeAll();
+                userScene.getStylesheets().add(String.valueOf(currentStylesheet));
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
             stage.setScene(userScene);
         });
 
-        scene.getStylesheets().add("file:src/main/resources/style.css");
-        loginScene.getStylesheets().add("file:src/main/resources/style.css");
+/*        scene.getStylesheets().add("file:src/main/resources/style.css");
+        loginScene.getStylesheets().add("file:src/main/resources/style.css");*/
 
         stage.setTitle("Budsjettverktøy");
         stage.setScene(loginScene);
@@ -521,6 +552,21 @@ class Scene2 extends Scene {
         Button settingsOptionsTextOne = new Button("Ønsker du å endre navn på en bruker?");
         Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
         settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
+
+
+        /*HBox settingsLowerBox = new HBox();
+        settingsLowerBox.setSpacing(50);
+        settingsLowerBox.setPadding(new Insets(10, 10, 50, 10));
+        settingsLowerBox.setAlignment(Pos.CENTER);
+        Button defaultThemeButton = new Button("Lys modus");
+        Button darkThemeButton = new Button("Mørk modus");
+        Button highContrastButton = new Button("Høy-kontrast modus");
+        settingsLowerBox.getChildren().addAll(defaultThemeButton, darkThemeButton, highContrastButton);
+        defaultThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add("file:src/main/resources/style.css");
+        settingsWindow.setBottom(settingsLowerBox);
+        });*/
 
         //settingsWindow - General settings
         settingsWindow.setTop(topElementsSettings);

@@ -27,17 +27,17 @@ public class Budget {
 
             if (line == null || !line.contains("Budget for") || line.isBlank()) {
                 BufferedWriter constructorWriter = new BufferedWriter(new FileWriter(file));
-                System.out.println("File does not start with the expected line.");
+                System.out.println("Creating new profile!");
                 System.out.println(reader.readLine());
                 constructorWriter.write("Budget for " + username + " created at " + Date.from(Instant.now()) + "\n");
                 constructorWriter.close();
-            } else {
+            } /*else {
                 System.out.println("File starts with the expected line.");
                 System.out.println("Existing data in the file:");
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                 }
-            }
+            }*/
 
             reader.close();
         } catch (IOException e) {
