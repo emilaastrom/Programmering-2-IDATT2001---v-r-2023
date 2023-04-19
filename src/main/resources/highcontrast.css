@@ -1,0 +1,184 @@
+.text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 30;
+    -fx-border-color: #000000;
+}
+
+.borderpane{
+    -fx-background-color: rgba(65, 65, 65, 0);
+}
+
+.root{
+    /* påvirker smådetaljer som separator på overview, og linjene fra piechart
+    påvirker teksten rundt barchart (mørk bakgrunn lys tekst)*/
+    -fx-background: rgb(18, 18, 18);
+
+    /* endrer på fargen til tekst i input fields*/
+    -fx-mid-text-color: #000000;
+}
+
+.barchart{
+    -fx-background-color: transparent;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-fill: #ffffff;
+}
+
+.label {
+    -fx-text-fill: #ffffff;
+}
+
+.barchart .chart-plot-background{
+    -fx-background-color: transparent;
+}
+
+.barchart .chart-vertical-grid-lines{
+    -fx-fill: #ffffff;
+    -fx-font-size: 20;
+}
+
+.graphsbox{
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+.chart{
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+HBox {
+    -fx-background-color: rgba(76, 76, 76, 0.4);
+    -fx-text-fill: #ffffff;
+    -fx-fill-width: true;
+}
+
+VBox {
+    -fx-fill-width: true;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-alignment: top-center;
+}
+
+#loginPageBox{
+    -fx-alignment: center;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-font: 20px default;
+    -fx-fill: red;
+}
+
+.table-view{
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+
+
+.table-view .column-header-background .label {
+    /* bakgrunn for øverste rad av tableview */
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+
+.table-view .column-header-background .filler {
+    /* bakgrunn for øverste rad av tableview (UTENFOR selve kolonnene) */
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+
+.table-view .column-header{
+    -fx-background-radius: 7px 7px 0px 0px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+    -fx-text-fill: #000000;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+.table-row-cell:even{
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+}
+
+.overviewtableviewbox{
+    -fx-spacing: 50px;
+    -fx-alignment: center;
+    /* bakgrunnen til tableviews på overview*/
+    -fx-background-color: rgba(0, 0, 0, 0.36);
+}
+
+.piechart{
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+.piechart .text {
+    -fx-fill: #ffffff;
+    -fx-font-size: 20;
+}
+
+.vanliginformasjonstekst{
+    -fx-fill: #ffffff;
+    -fx-font-size: 20;
+}
+
+#titleOverviewPane{
+    -fx-background-color: rgba(0, 0, 0, 0.4);
+}
+
+
+
+#brukernavn{
+    -fx-fill: #ffffff;
+    -fx-font-size: 20;
+}
+
+#overviewtekstnederst {
+    -fx-fill: #ffffff;
+    -fx-font-size: 20;
+    -fx-text-background-color: blue;
+}
+
+#radtoppen{
+    /*den øverste delen av programmet, bak "Velkommen, bruker" */
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-border-style: hidden hidden solid hidden;
+}
+
+#navigationMenu{
+    -fx-border-style: hidden solid hidden hidden;
+}
+
+#incomeTitleBox, #fieldbox{
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.button {
+    -fx-focus-traversable: true;
+}
+
+.button, #loginPageBox .button{
+    -fx-background-color: rgb(0, 0, 0);
+    -fx-fill: #000000;
+    -fx-text-fill: #000000;
+    -fx-border-color: #ffffff;
+    -fx-background-radius: 100;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+    -fx-alignment: center;
+}
+
+.button:hover, #loginPageBox .button:hover{
+    -fx-background-color: #F2C200;
+}
+
+.button:pressed, #loginPageBox .button:pressed{
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-text-fill: #000000;
+}
