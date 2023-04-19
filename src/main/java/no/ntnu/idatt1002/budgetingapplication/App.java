@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo;
+package no.ntnu.idatt1002.budgetingapplication;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -22,8 +22,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import no.ntnu.idatt1002.demo.data.Budget;
-import no.ntnu.idatt1002.demo.data.BudgetItem;
+import no.ntnu.idatt1002.budgetingapplication.data.Budget;
+import no.ntnu.idatt1002.budgetingapplication.data.BudgetItem;
 
 import java.awt.*;
 import java.io.File;
@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Use this class to start the application
  */
-public class MyApp extends Application {
+public class App extends Application {
 
     /**
      * Main method for my application

@@ -1,10 +1,8 @@
-package no.ntnu.idatt1002.demo.data;
+package no.ntnu.idatt1002.budgetingapplication.data;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BudgetTest {

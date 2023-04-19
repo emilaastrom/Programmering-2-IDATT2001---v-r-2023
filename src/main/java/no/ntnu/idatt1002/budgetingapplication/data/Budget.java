@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo.data;
+package no.ntnu.idatt1002.budgetingapplication.data;
 
 import java.io.*;
 import java.time.Instant;
