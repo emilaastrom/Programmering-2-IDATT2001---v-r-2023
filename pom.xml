@@ -165,7 +165,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        no.ntnu.idatt1002.demo.MyApp
+                                        no.ntnu.idatt1002.budgetingapplication.App
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -194,7 +194,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>src/main/java/no/ntnu/idatt1002/demo/InterfaceStarter.java</mainClass>
+                            <mainClass>src/main/java/no/ntnu/idatt1002/budgetingapplication/App.java</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
