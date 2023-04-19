@@ -203,7 +203,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>src/main/java/no/ntnu/idatt1002/budgetingapplication/App.java</mainClass>
+                            <mainClass>src/main/java/no/ntnu/idatt1002/budgetingapplication/InterfaceStarter.java</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
