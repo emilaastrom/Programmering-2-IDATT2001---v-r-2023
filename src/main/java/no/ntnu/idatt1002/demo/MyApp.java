@@ -10,6 +10,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,8 +24,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.data.Budget;
 import no.ntnu.idatt1002.demo.data.BudgetItem;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -598,6 +608,27 @@ class Scene2 extends Scene {
         feedbackButton.autosize();
         helpFeedbackBox.getChildren().addAll(feedbackField, feedbackButton);
 
+        feedbackButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            String feedback = feedbackField.getText();
+            String encodedFeedback;
+            try {
+                encodedFeedback = URLEncoder.encode(feedback, "UTF-8").replaceAll("\\+", "%20");
+            } catch (UnsupportedEncodingException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.MAIL)) {
+                    try {
+                        URI mailto =  new URI("mailto:emillaa@stud.ntnu.no?subject=Tilbakemelding-budsjettprogram&body=" + encodedFeedback);
+                        desktop.mail(mailto);
+                    } catch (URISyntaxException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        });
 
         helpWindow.setBottom(helpFeedbackBox);
         helpWindow.setVisible(false);
