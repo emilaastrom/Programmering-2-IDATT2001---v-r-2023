@@ -176,6 +176,7 @@ VBox {
 
 .button:hover, #loginPageBox .button:hover{
     -fx-background-color: #F2C200;
+    -fx-background-radius: 20;
 }
 
 .button:pressed, #loginPageBox .button:pressed{

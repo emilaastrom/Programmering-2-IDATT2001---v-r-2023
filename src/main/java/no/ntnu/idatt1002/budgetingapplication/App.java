@@ -630,6 +630,7 @@ class Scene2 extends Scene {
         VBox helpWindowTopBox = new VBox();
         helpWindowTopBox.setAlignment(Pos.CENTER);
         Text helpWindowTitle = new Text("Her kan du få hjelp til å bruke programmet.");
+        helpWindowTitle.setId("vanliginformasjonstekst");
         helpWindowTopBox.getChildren().add(helpWindowTitle);
         Text helpText = new Text("""
                 Ofte stilte spørsmål::
@@ -638,6 +639,7 @@ class Scene2 extends Scene {
                     - Svar 1: Programmet er laget for privat bruk, med mål om å holde styr på privatøkonomien!\s
                     \s
                 - Spørsmål 2:\s""");
+        helpText.setId("vanliginformasjonstekst");
         helpWindow.setTop(helpWindowTopBox);
         helpWindow.setCenter(helpText);
 
@@ -649,7 +651,7 @@ class Scene2 extends Scene {
         feedbackField.setPrefHeight(150);
         feedbackField.setMaxWidth(600);
         feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
-        Button feedbackButton = new Button("Send tilbakemelding");
+        Button feedbackButton = new Button("Send tilbakemelding (åpner e-postprogram)");
         feedbackButton.setAlignment(Pos.CENTER);
         feedbackButton.setMinWidth(250);
         feedbackButton.autosize();

@@ -42,7 +42,6 @@
     -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-fill: #000000;
     -fx-text-fill: #000000;
-    -fx-background-radius: 100;
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-padding: 10 20 10 20;
@@ -146,7 +145,7 @@ VBox {
     -fx-fill: #000000;
     -fx-font-size: 20;
 }
-.vanliginformasjonstekst{
+.vanliginformasjonstekst, #vanliginformasjonstekst, #brukernavn{
     -fx-text-fill: #000000;
     -fx-font-size: 20;
 }
