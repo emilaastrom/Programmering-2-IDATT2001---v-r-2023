@@ -149,7 +149,8 @@ public class Budget {
                         if (line.replaceFirst("Income: ", "").trim().equals(income)) {
                             br.readLine();
                         } else if(line.isBlank()){
-                            line = br.readLine();
+                            //line = br.readLine();
+                            continue;
                         } else {
                             pw.println(line);
                             pw.flush();
@@ -208,7 +209,8 @@ public class Budget {
                         if (line.replaceFirst("Expense: ", "").trim().equals(expense)) {
                             br.readLine();
                         } else if(line.isBlank()){
-                            br.readLine();
+                            //br.readLine();
+                            continue;
                         } else {
                             pw.println(line);
                             pw.flush();
