@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.budgetingapplication.data.Budget;
 import no.ntnu.idatt1002.budgetingapplication.data.BudgetItem;
@@ -735,7 +736,7 @@ class Scene2 extends Scene {
 
         Stage logOutAlert = new Stage();
         logOutAlert.setTitle("Logg ut");
-
+        logOutAlert.initModality(Modality.APPLICATION_MODAL);
 
         Label logOutTitle = new Label("Er du sikker på at du ønsker å logge ut?");
 
