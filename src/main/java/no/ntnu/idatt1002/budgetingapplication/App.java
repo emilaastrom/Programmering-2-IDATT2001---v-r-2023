@@ -764,6 +764,7 @@ class Scene2 extends Scene {
         Stage logOutAlert = new Stage();
         logOutAlert.setTitle("Logg ut");
 
+
         Label logOutTitle = new Label("Er du sikker på at du ønsker å logge ut?");
 
         Button confirmLogOut = new Button("Logg ut");
@@ -779,11 +780,16 @@ class Scene2 extends Scene {
         container.setSpacing(15);
         container.setPadding(new Insets(25));
         container.setAlignment(Pos.CENTER);
-        logOutAlert.setScene(new Scene(container));
+        Scene logoutScene = new Scene(container);
+
+        logOutAlert.setScene(logoutScene);
 
         Button loggUtButton = new Button("Logg ut");
         loggUtButton.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
+                ObservableList<String> stylesheets = super.getStylesheets();
+                String currentStylesheet = stylesheets.get(stylesheets.size() - 1);
+                logoutScene.getStylesheets().add(currentStylesheet);
                 logOutAlert.show();
             }
         });
