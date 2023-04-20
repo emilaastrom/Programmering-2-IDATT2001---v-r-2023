@@ -38,7 +38,7 @@
 }
 
 
-.button{
+.button, #loginPageBox .button{
     -fx-background-color: rgba(255, 255, 255, 0.5);
     -fx-fill: #000000;
     -fx-text-fill: #000000;
