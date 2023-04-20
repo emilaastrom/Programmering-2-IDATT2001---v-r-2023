@@ -98,6 +98,7 @@ VBox {
 
 .table-view{
     -fx-background-color: rgba(0, 0, 0, 0.4);
+    -fx-selection-bar: transparent;
 }
 
 
@@ -127,6 +128,12 @@ VBox {
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
+}
+
+.table-view:focused .table-row-cell:selected{
+    -fx-background-color: rgba(147, 241, 123, 0.31);
+    -fx-text-fill: #ffffff;
+    -fx-border-color: transparent;
 }
 
 .overviewtableviewbox{
