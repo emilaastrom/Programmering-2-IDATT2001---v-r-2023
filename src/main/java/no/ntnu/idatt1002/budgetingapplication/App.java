@@ -704,6 +704,16 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
+        incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            titleText.setText("Inntekter");
+            incomeWindow.setVisible(true);
+            expensesWindow.setVisible(false);
+            overviewWindow.setVisible(false);
+            helpWindow.setVisible(false);
+            settingsWindow.setVisible(false);
+            savingsWindow.setVisible(false);
+        });
+
         expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Utgifter");
             incomeWindow.setVisible(false);
