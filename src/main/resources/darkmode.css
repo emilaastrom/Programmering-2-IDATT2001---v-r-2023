@@ -154,7 +154,7 @@ VBox {
     -fx-font-size: 20;
 }
 
-.vanliginformasjonstekst{
+.vanliginformasjonstekst, #vanliginformasjonstekst{
     -fx-fill: #ffffff;
     -fx-font-size: 20;
 }

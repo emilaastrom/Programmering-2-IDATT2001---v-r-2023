@@ -1,6 +1,6 @@
 .text{
     -fx-fill: #ffffff;
-    -fx-font-size: 30;
+    -fx-font-size: 25;
     -fx-border-color: #000000;
 }
 
@@ -120,7 +120,7 @@ VBox {
     -fx-font-size: 20;
 }
 
-.vanliginformasjonstekst{
+.vanliginformasjonstekst, #vanliginformasjonstekst{
     -fx-fill: #ffffff;
     -fx-font-size: 20;
 }
