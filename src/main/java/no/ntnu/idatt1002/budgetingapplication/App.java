@@ -295,12 +295,12 @@ class Scene2 extends Scene {
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.getStyleClass().add("tablecolumn");
-        nameColumn.setMinWidth(100);
+        nameColumn.setMinWidth(200);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
         expensesTableView.setItems(expensesData.get());
-        sumColumn.setMinWidth(281);
+        sumColumn.setMinWidth(181);
 
         expensesTableView.getColumns().addAll(nameColumn, sumColumn);
         expensesTableView.setMaxHeight(200);
@@ -313,14 +313,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomeColumn = new TableColumn<>("Navn");
-        nameIncomeColumn.setMinWidth(100);
+        nameIncomeColumn.setMinWidth(200);
         nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomeTableView.setItems(incomeData.get());
-        sumIncomeColumn.setMinWidth(250);
+        sumIncomeColumn.setMinWidth(150);
 
         incomeTableView.getColumns().addAll(nameIncomeColumn, sumIncomeColumn);
         incomeTableView.setMaxHeight(200);
@@ -383,14 +383,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomePageColumn = new TableColumn<>("Navn");
-        nameIncomePageColumn.setMinWidth(100);
+        nameIncomePageColumn.setMinWidth(200);
         nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomePageTableView.setItems(incomePageData.get());
-        sumIncomePageColumn.setMinWidth(698);
+        sumIncomePageColumn.setMinWidth(598);
 
         incomePageTableView.getColumns().addAll(nameIncomePageColumn, sumIncomePageColumn);
         incomePageTableView.setMaxHeight(200);
@@ -427,10 +427,10 @@ class Scene2 extends Scene {
         fieldBox.setPadding(new Insets(10, 10, 10, 10));
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
-        incomeName.setPrefWidth(250);
+        incomeName.setPrefWidth(350);
         incomeName.setPromptText("Navn på inntekt (eks.: Lønn/Studielån)");
         TextField incomeSum = new TextField();
-        incomeSum.setPrefWidth(300);
+        incomeSum.setPrefWidth(200);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
 
@@ -463,14 +463,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> expensesPageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameExpensesPageColumn = new TableColumn<>("Navn");
-        nameExpensesPageColumn.setMinWidth(100);
+        nameExpensesPageColumn.setMinWidth(200);
         nameExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumExpensesPageColumn = new TableColumn<>("Sum (utgift)");
         sumExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         expensesPageTableView.setItems(expensesData.get());
-        sumExpensesPageColumn.setMinWidth(698);
+        sumExpensesPageColumn.setMinWidth(598);
 
         expensesPageTableView.getColumns().addAll(nameExpensesPageColumn, sumExpensesPageColumn);
         expensesPageTableView.setMaxHeight(200);
