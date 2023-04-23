@@ -550,8 +550,8 @@ class Scene2 extends Scene {
         HBox settingsMiddleBox = new HBox();
         settingsMiddleBox.setSpacing(50);
         settingsMiddleBox.setAlignment(Pos.CENTER);
-        Button settingsOptionsTextOne = new Button("Ønsker du å endre navn på en bruker?");
-        Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
+        Button settingsOptionsTextOne = new Button("Endre navn på denne brukeren");
+        Button settingsOptionsTextTwo = new Button("Slett denne brukerens budsjett");
         settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
 
         HBox settingsLowerBox = new HBox();
