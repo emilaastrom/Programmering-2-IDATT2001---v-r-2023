@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.budgetingapplication.data.Budget;
 import no.ntnu.idatt1002.budgetingapplication.data.BudgetItem;
@@ -294,12 +295,12 @@ class Scene2 extends Scene {
 
         TableColumn<BudgetItem, String> nameColumn = new TableColumn<>("Navn");
         nameColumn.getStyleClass().add("tablecolumn");
-        nameColumn.setMinWidth(100);
+        nameColumn.setMinWidth(200);
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
         TableColumn<BudgetItem, Double> sumColumn = new TableColumn<>("Sum (utgift)");
         sumColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
         expensesTableView.setItems(expensesData.get());
-        sumColumn.setMinWidth(281);
+        sumColumn.setMinWidth(181);
 
         expensesTableView.getColumns().addAll(nameColumn, sumColumn);
         expensesTableView.setMaxHeight(200);
@@ -312,14 +313,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> incomeData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomeColumn = new TableColumn<>("Navn");
-        nameIncomeColumn.setMinWidth(100);
+        nameIncomeColumn.setMinWidth(200);
         nameIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomeColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomeColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomeTableView.setItems(incomeData.get());
-        sumIncomeColumn.setMinWidth(250);
+        sumIncomeColumn.setMinWidth(150);
 
         incomeTableView.getColumns().addAll(nameIncomeColumn, sumIncomeColumn);
         incomeTableView.setMaxHeight(200);
@@ -382,14 +383,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> incomePageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getIncomeList()));
 
         TableColumn<BudgetItem, String> nameIncomePageColumn = new TableColumn<>("Navn");
-        nameIncomePageColumn.setMinWidth(100);
+        nameIncomePageColumn.setMinWidth(200);
         nameIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumIncomePageColumn = new TableColumn<>("Sum (inntekt)");
         sumIncomePageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         incomePageTableView.setItems(incomePageData.get());
-        sumIncomePageColumn.setMinWidth(698);
+        sumIncomePageColumn.setMinWidth(598);
 
         incomePageTableView.getColumns().addAll(nameIncomePageColumn, sumIncomePageColumn);
         incomePageTableView.setMaxHeight(200);
@@ -426,10 +427,10 @@ class Scene2 extends Scene {
         fieldBox.setPadding(new Insets(10, 10, 10, 10));
         fieldBox.setSpacing(10);
         TextField incomeName = new TextField();
-        incomeName.setPrefWidth(250);
+        incomeName.setPrefWidth(350);
         incomeName.setPromptText("Navn på inntekt (eks.: Lønn/Studielån)");
         TextField incomeSum = new TextField();
-        incomeSum.setPrefWidth(300);
+        incomeSum.setPrefWidth(200);
         incomeSum.setPromptText("Sum på inntekt (eks.: 10000)");
         Button addIncomeButton = new Button("Legg til inntekt");
 
@@ -462,14 +463,14 @@ class Scene2 extends Scene {
         AtomicReference<ObservableList<BudgetItem>> expensesPageData = new AtomicReference<>(FXCollections.observableArrayList(userBudget.getExpenseList()));
 
         TableColumn<BudgetItem, String> nameExpensesPageColumn = new TableColumn<>("Navn");
-        nameExpensesPageColumn.setMinWidth(100);
+        nameExpensesPageColumn.setMinWidth(200);
         nameExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemName"));
 
         TableColumn<BudgetItem, Double> sumExpensesPageColumn = new TableColumn<>("Sum (utgift)");
         sumExpensesPageColumn.setCellValueFactory(new PropertyValueFactory<>("budgetItemValue"));
 
         expensesPageTableView.setItems(expensesData.get());
-        sumExpensesPageColumn.setMinWidth(698);
+        sumExpensesPageColumn.setMinWidth(598);
 
         expensesPageTableView.getColumns().addAll(nameExpensesPageColumn, sumExpensesPageColumn);
         expensesPageTableView.setMaxHeight(200);
@@ -549,12 +550,11 @@ class Scene2 extends Scene {
         HBox settingsMiddleBox = new HBox();
         settingsMiddleBox.setSpacing(50);
         settingsMiddleBox.setAlignment(Pos.CENTER);
-        Button settingsOptionsTextOne = new Button("Ønsker du å endre navn på en bruker?");
-        Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
+        Button settingsOptionsTextOne = new Button("Endre navn på denne brukeren");
+        Button settingsOptionsTextTwo = new Button("Slett denne brukerens budsjett");
         settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
 
-
-        /*HBox settingsLowerBox = new HBox();
+        HBox settingsLowerBox = new HBox();
         settingsLowerBox.setSpacing(50);
         settingsLowerBox.setPadding(new Insets(10, 10, 50, 10));
         settingsLowerBox.setAlignment(Pos.CENTER);
@@ -563,14 +563,22 @@ class Scene2 extends Scene {
         Button highContrastButton = new Button("Høy-kontrast modus");
         settingsLowerBox.getChildren().addAll(defaultThemeButton, darkThemeButton, highContrastButton);
         defaultThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add("file:src/main/resources/style.css");
-        settingsWindow.setBottom(settingsLowerBox);
-        });*/
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/style.css");
+        });
+        darkThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/darkmode.css");
+        });
+        highContrastButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/highcontrast.css");
+        });
 
         //settingsWindow - General settings
         settingsWindow.setTop(topElementsSettings);
         settingsWindow.setCenter(settingsMiddleBox);
+        settingsWindow.setBottom(settingsLowerBox);
         settingsWindow.setVisible(false);
         windowPane.getChildren().addAll(settingsWindow);
 
@@ -627,8 +635,11 @@ class Scene2 extends Scene {
         BorderPane helpWindow = new BorderPane();
         helpWindow.getStyleClass().add("borderpane");
         VBox helpWindowTopBox = new VBox();
+        helpWindowTopBox.setPrefHeight(100);
+        helpWindowTopBox.setPadding(new Insets(30, 10, 10, 10));
         helpWindowTopBox.setAlignment(Pos.CENTER);
         Text helpWindowTitle = new Text("Her kan du få hjelp til å bruke programmet.");
+        helpWindowTitle.setId("vanliginformasjonstekst");
         helpWindowTopBox.getChildren().add(helpWindowTitle);
         Text helpText = new Text("""
                 Ofte stilte spørsmål::
@@ -637,6 +648,7 @@ class Scene2 extends Scene {
                     - Svar 1: Programmet er laget for privat bruk, med mål om å holde styr på privatøkonomien!\s
                     \s
                 - Spørsmål 2:\s""");
+        helpText.setId("vanliginformasjonstekst");
         helpWindow.setTop(helpWindowTopBox);
         helpWindow.setCenter(helpText);
 
@@ -648,7 +660,7 @@ class Scene2 extends Scene {
         feedbackField.setPrefHeight(150);
         feedbackField.setMaxWidth(600);
         feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
-        Button feedbackButton = new Button("Send tilbakemelding");
+        Button feedbackButton = new Button("Send tilbakemelding (åpner e-postprogram)");
         feedbackButton.setAlignment(Pos.CENTER);
         feedbackButton.setMinWidth(250);
         feedbackButton.autosize();
@@ -688,10 +700,8 @@ class Scene2 extends Scene {
 
         //Buttons for navigating the application
         Button overviewButton = new Button("Oversikt");
-        Button accountButton = new Button("Konto");
         Button incomeButton = new Button("Inntekter");
         Button expensesButton = new Button("Utgifter");
-        Button savingsButton = new Button("Sparemål");
         Button settingsButton = new Button("Innstillinger");
         Button helpButton = new Button("Hjelp");
 
@@ -705,8 +715,6 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
-
-        accountButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> titleText.setText("Konto"));
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
@@ -715,7 +723,6 @@ class Scene2 extends Scene {
             helpWindow.setVisible(false);
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
-
         });
 
         expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -728,18 +735,6 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
-        savingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            titleText.setText("Sparemål");
-            overviewWindow.setVisible(false);
-            incomeWindow.setVisible(false);
-            expensesWindow.setVisible(false);
-            savingsWindow.setVisible(true);
-            helpWindow.setVisible(false);
-            settingsWindow.setVisible(false);
-
-
-        });
-
         settingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Innstillinger");
             overviewWindow.setVisible(false);
@@ -748,7 +743,6 @@ class Scene2 extends Scene {
             helpWindow.setVisible(false);
             settingsWindow.setVisible(true);
             savingsWindow.setVisible(false);
-
         });
 
         helpButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -763,7 +757,7 @@ class Scene2 extends Scene {
 
         Stage logOutAlert = new Stage();
         logOutAlert.setTitle("Logg ut");
-
+        logOutAlert.initModality(Modality.APPLICATION_MODAL);
 
         Label logOutTitle = new Label("Er du sikker på at du ønsker å logge ut?");
 
@@ -853,8 +847,8 @@ class Scene2 extends Scene {
 
 
         navigationMenu.isFillWidth();
-        navigationMenu.getChildren().addAll(overviewButton, accountButton, incomeButton
-                , expensesButton, savingsButton, settingsButton, helpButton, loggUtButton);
+        navigationMenu.getChildren().addAll(overviewButton, incomeButton
+                , expensesButton, settingsButton, helpButton, loggUtButton);
         root.setLeft(navigationMenu);
         root.setCenter(windowPane);
     }
