@@ -554,8 +554,7 @@ class Scene2 extends Scene {
         Button settingsOptionsTextTwo = new Button("Ønsker du å slette en bruker?");
         settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
 
-
-        /*HBox settingsLowerBox = new HBox();
+        HBox settingsLowerBox = new HBox();
         settingsLowerBox.setSpacing(50);
         settingsLowerBox.setPadding(new Insets(10, 10, 50, 10));
         settingsLowerBox.setAlignment(Pos.CENTER);
@@ -564,14 +563,22 @@ class Scene2 extends Scene {
         Button highContrastButton = new Button("Høy-kontrast modus");
         settingsLowerBox.getChildren().addAll(defaultThemeButton, darkThemeButton, highContrastButton);
         defaultThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add("file:src/main/resources/style.css");
-        settingsWindow.setBottom(settingsLowerBox);
-        });*/
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/style.css");
+        });
+        darkThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/darkmode.css");
+        });
+        highContrastButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            super.getStylesheets().clear();
+            super.getStylesheets().add("file:src/main/resources/highcontrast.css");
+        });
 
         //settingsWindow - General settings
         settingsWindow.setTop(topElementsSettings);
         settingsWindow.setCenter(settingsMiddleBox);
+        settingsWindow.setBottom(settingsLowerBox);
         settingsWindow.setVisible(false);
         windowPane.getChildren().addAll(settingsWindow);
 
@@ -628,6 +635,8 @@ class Scene2 extends Scene {
         BorderPane helpWindow = new BorderPane();
         helpWindow.getStyleClass().add("borderpane");
         VBox helpWindowTopBox = new VBox();
+        helpWindowTopBox.setPrefHeight(100);
+        helpWindowTopBox.setPadding(new Insets(30, 10, 10, 10));
         helpWindowTopBox.setAlignment(Pos.CENTER);
         Text helpWindowTitle = new Text("Her kan du få hjelp til å bruke programmet.");
         helpWindowTitle.setId("vanliginformasjonstekst");
