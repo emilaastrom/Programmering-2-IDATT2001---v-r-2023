@@ -114,15 +114,38 @@ public class App extends Application {
             loginScene.getStylesheets().clear();
             loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
         });
+        defaultThemeButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                currentStylesheet.set("file:src/main/resources/style.css");
+                loginScene.getStylesheets().clear();
+                loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+            }
+        });
+
         darkThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             currentStylesheet.set("file:src/main/resources/darkmode.css");
             loginScene.getStylesheets().clear();
             loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
         });
+        darkThemeButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                currentStylesheet.set("file:src/main/resources/darkmode.css");
+                loginScene.getStylesheets().clear();
+                loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+            }
+        });
+
         highContrastButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             currentStylesheet.set("file:src/main/resources/highcontrast.css");
             loginScene.getStylesheets().clear();
             loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+        });
+        highContrastButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                currentStylesheet.set("file:src/main/resources/highcontrast.css");
+                loginScene.getStylesheets().clear();
+                loginScene.getStylesheets().add(String.valueOf(currentStylesheet));
+            }
         });
 
         accountSelection.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -152,6 +175,8 @@ public class App extends Application {
             }
             stage.setScene(userScene);
         });
+
+
 
 /*        scene.getStylesheets().add("file:src/main/resources/style.css");
         loginScene.getStylesheets().add("file:src/main/resources/style.css");*/
@@ -551,8 +576,59 @@ class Scene2 extends Scene {
         settingsMiddleBox.setSpacing(50);
         settingsMiddleBox.setAlignment(Pos.CENTER);
         Button settingsOptionsTextOne = new Button("Endre navn på denne brukeren");
-        Button settingsOptionsTextTwo = new Button("Slett denne brukerens budsjett");
-        settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsTextTwo);
+        Button settingsOptionsDeleteBudget = new Button("Slett denne brukerens budsjett");
+
+        Stage confirmDeleteBudgetStage = new Stage();
+        confirmDeleteBudgetStage.setTitle("Slett brukerens budsjett");
+        confirmDeleteBudgetStage.initModality(Modality.APPLICATION_MODAL);
+
+        Label deleteBudgetTitle = new Label("Er du sikker? Dette vil fjerne all lagret informasjon i denne brukerens budsjett");
+
+        Button confirmBudgetDelete = new Button("Ja, slett all informasjonen i denne brukerens budsjett og lukk programmet");
+        confirmBudgetDelete.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                userBudget.clearBudget(user);
+                System.exit(0);
+            }
+        });
+        confirmBudgetDelete.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                userBudget.clearBudget(user);
+                System.exit(0);
+            }
+            if (event.getCode() == KeyCode.ESCAPE) {
+                confirmDeleteBudgetStage.close();
+            }
+        });
+
+
+        VBox containerDeleteBudget = new VBox(deleteBudgetTitle, confirmBudgetDelete);
+
+        containerDeleteBudget.setSpacing(15);
+        containerDeleteBudget.setPadding(new Insets(25));
+        containerDeleteBudget.setAlignment(Pos.CENTER);
+        Scene deleteBudgetScene = new Scene(containerDeleteBudget);
+
+        confirmDeleteBudgetStage.setScene(deleteBudgetScene);
+
+        settingsOptionsDeleteBudget.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                ObservableList<String> stylesheets = super.getStylesheets();
+                String currentStylesheet = stylesheets.get(stylesheets.size() - 1);
+                deleteBudgetScene.getStylesheets().add(currentStylesheet);
+                confirmDeleteBudgetStage.show();
+            }
+        });
+        settingsOptionsDeleteBudget.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                ObservableList<String> stylesheets = super.getStylesheets();
+                String currentStylesheet = stylesheets.get(stylesheets.size() - 1);
+                deleteBudgetScene.getStylesheets().add(currentStylesheet);
+                confirmDeleteBudgetStage.show();
+            }
+        });
+
+        settingsMiddleBox.getChildren().addAll(settingsOptionsTextOne, settingsOptionsDeleteBudget);
 
         HBox settingsLowerBox = new HBox();
         settingsLowerBox.setSpacing(50);
@@ -566,13 +642,33 @@ class Scene2 extends Scene {
             super.getStylesheets().clear();
             super.getStylesheets().add("file:src/main/resources/style.css");
         });
+        defaultThemeButton.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                super.getStylesheets().clear();
+                super.getStylesheets().add("file:src/main/resources/style.css");
+            }
+        });
+
         darkThemeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             super.getStylesheets().clear();
             super.getStylesheets().add("file:src/main/resources/darkmode.css");
         });
+        darkThemeButton.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                super.getStylesheets().clear();
+                super.getStylesheets().add("file:src/main/resources/darkmode.css");
+            }
+        });
+
         highContrastButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             super.getStylesheets().clear();
             super.getStylesheets().add("file:src/main/resources/highcontrast.css");
+        });
+        highContrastButton.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                super.getStylesheets().clear();
+                super.getStylesheets().add("file:src/main/resources/highcontrast.css");
+            }
         });
 
         //settingsWindow - General settings
@@ -715,6 +811,18 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
+        overviewButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                titleText.setText("Oversikt");
+                helpWindow.setVisible(false);
+                overviewWindow.setVisible(true);
+                incomeWindow.setVisible(false);
+                expensesWindow.setVisible(false);
+                settingsWindow.setVisible(false);
+                savingsWindow.setVisible(false);
+            }
+        });
+
         incomeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Inntekter");
             incomeWindow.setVisible(true);
@@ -723,6 +831,18 @@ class Scene2 extends Scene {
             helpWindow.setVisible(false);
             settingsWindow.setVisible(false);
             savingsWindow.setVisible(false);
+        });
+
+        incomeButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                titleText.setText("Inntekter");
+                incomeWindow.setVisible(true);
+                expensesWindow.setVisible(false);
+                overviewWindow.setVisible(false);
+                helpWindow.setVisible(false);
+                settingsWindow.setVisible(false);
+                savingsWindow.setVisible(false);
+            }
         });
 
         expensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -735,6 +855,18 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
+        expensesButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                titleText.setText("Utgifter");
+                incomeWindow.setVisible(false);
+                expensesWindow.setVisible(true);
+                overviewWindow.setVisible(false);
+                helpWindow.setVisible(false);
+                settingsWindow.setVisible(false);
+                savingsWindow.setVisible(false);
+            }
+        });
+
         settingsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             titleText.setText("Innstillinger");
             overviewWindow.setVisible(false);
@@ -743,6 +875,18 @@ class Scene2 extends Scene {
             helpWindow.setVisible(false);
             settingsWindow.setVisible(true);
             savingsWindow.setVisible(false);
+        });
+
+        settingsButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                titleText.setText("Innstillinger");
+                overviewWindow.setVisible(false);
+                incomeWindow.setVisible(false);
+                expensesWindow.setVisible(false);
+                helpWindow.setVisible(false);
+                settingsWindow.setVisible(true);
+                savingsWindow.setVisible(false);
+            }
         });
 
         helpButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -755,6 +899,18 @@ class Scene2 extends Scene {
             savingsWindow.setVisible(false);
         });
 
+        helpButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                titleText.setText("Hjelp");
+                helpWindow.setVisible(true);
+                overviewWindow.setVisible(false);
+                incomeWindow.setVisible(false);
+                expensesWindow.setVisible(false);
+                settingsWindow.setVisible(false);
+                savingsWindow.setVisible(false);
+            }
+        });
+
         Stage logOutAlert = new Stage();
         logOutAlert.setTitle("Logg ut");
         logOutAlert.initModality(Modality.APPLICATION_MODAL);
@@ -765,6 +921,14 @@ class Scene2 extends Scene {
         confirmLogOut.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 System.exit(0);
+            }
+        });
+        confirmLogOut.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                System.exit(0);
+            }
+            if (event.getCode() == KeyCode.ESCAPE) {
+                logOutAlert.close();
             }
         });
 
@@ -781,6 +945,14 @@ class Scene2 extends Scene {
         Button loggUtButton = new Button("Logg ut");
         loggUtButton.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
+                ObservableList<String> stylesheets = super.getStylesheets();
+                String currentStylesheet = stylesheets.get(stylesheets.size() - 1);
+                logoutScene.getStylesheets().add(currentStylesheet);
+                logOutAlert.show();
+            }
+        });
+        loggUtButton.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 ObservableList<String> stylesheets = super.getStylesheets();
                 String currentStylesheet = stylesheets.get(stylesheets.size() - 1);
                 logoutScene.getStylesheets().add(currentStylesheet);

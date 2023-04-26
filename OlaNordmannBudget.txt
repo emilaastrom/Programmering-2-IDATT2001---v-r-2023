@@ -1,19 +1,16 @@
+Budget for olanordmann created at Mon Apr 24 09:51:15 CEST 2023
 
+Income: Studielån
+Value: 8500.0
+Income: Deltidsjobb
+Value: 3500.0
+Expense: Bolig
+Value: 4500.0
 Expense: Mat
 Value: 3500.0
-Expense: Transport
-Value: 600.0
-Expense: Bolig
-Value: 5000.0
-Expense: Fritid
+Expense: Transport 
+Value: 700.0
+Expense: Hobby
 Value: 500.0
-Expense: Klær
-Value: 1000.0
-Expense: Helse
-Value: 1000.0
-Income: Studielån
-Value: 8100.0
-Income: Deltidsjobb
-Value: 3000.0
-Expense: transport
-Value: 25000.0
+Expense: Strøm
+Value: 400.0

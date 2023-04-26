@@ -49,6 +49,7 @@
     -fx-border-radius: 20;
     -fx-alignment: center;
     -fx-background-radius: 20;
+    -fx-focus-traversable: true;
 }
 
 
@@ -59,6 +60,16 @@
 
 .button:pressed{
     -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-text-fill: #282828;
+}
+
+.button:focused, #velgbrukerknapp:focused{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+    -fx-text-fill: #282828;
+}
+
+#velgbrukerknapp:hover{
+    -fx-background-color: rgba(0, 0, 0, 0.2);
     -fx-text-fill: #282828;
 }
 

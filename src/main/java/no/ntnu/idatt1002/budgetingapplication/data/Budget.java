@@ -118,6 +118,20 @@ public class Budget {
     }
 
     /**
+     * Empties the budget file, removing all incomes and expenses.
+     *
+     * @param username name of the user whose budget file is to be cleared
+     */
+    public void clearBudget(String username){
+        try {
+            BufferedWriter myWriter = new BufferedWriter(new FileWriter(username + "Budget.txt"));
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Remove income.
      *
      * @param income the income

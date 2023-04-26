@@ -184,6 +184,11 @@ VBox {
     -fx-text-fill: #000000;
 }
 
+.button:focused, #velgbrukerknapp:focused{
+    -fx-background-color: rgba(242, 194, 0, 0.5);
+    -fx-text-fill: #282828;
+}
+
 .table-row-cell:pressed{
     -fx-background-color: #ffffff;
     -fx-text-fill: #ffffff;

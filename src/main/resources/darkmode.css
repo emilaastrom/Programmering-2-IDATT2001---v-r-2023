@@ -65,6 +65,11 @@
     -fx-text-fill: #eaeaea;
 }
 
+.button:focused, #velgbrukerknapp:focused{
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: #282828;
+}
+
 .graphsbox{
     -fx-padding: 10px;
     -fx-spacing: 10px;
@@ -142,6 +147,7 @@ VBox {
     /* bakgrunnen til tableviews på overview*/
     -fx-background-color: rgba(0, 0, 0, 0.36);
 }
+
 
 .piechart{
     -fx-background-color: rgba(0, 0, 0, 0);
