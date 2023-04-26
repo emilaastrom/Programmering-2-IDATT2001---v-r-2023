@@ -422,6 +422,8 @@ class Scene2 extends Scene {
         incomePageTableView.setMinWidth(350);
 
 
+        Label totalIncome = new Label("Total inntekt: " + userBudget.getTotalIncome());
+
         Button removeIncomeButton = new Button("Fjern markert inntekt");
         removeIncomeButton.setMinWidth(800);
         removeIncomeButton.setOnAction(e -> {
@@ -429,6 +431,7 @@ class Scene2 extends Scene {
             incomePageTableView.getItems().remove(selectedItem);
             incomeTableView.getItems().remove(selectedItem);
             userBudget.removeIncome(selectedItem.getBudgetItemName());
+            totalIncome.setText("Total inntekt: " + userBudget.getTotalIncome());
 
             //UPDATING CHARTS
             updateBarChart(userBudget, barChart, series1);
@@ -442,7 +445,7 @@ class Scene2 extends Scene {
         VBox tableViewBox = new VBox();
         tableViewBox.setPadding(new Insets(50, 0, 0, 0));
         tableViewBox.setSpacing(10);
-        tableViewBox.getChildren().addAll(incomePageTableView, removeIncomeButton);
+        tableViewBox.getChildren().addAll(incomePageTableView, removeIncomeButton, totalIncome);
 
         BorderPane incomeWindowElements = new BorderPane();
         incomeWindowElements.getStyleClass().add("borderpane");
@@ -501,6 +504,8 @@ class Scene2 extends Scene {
         expensesPageTableView.setMaxHeight(200);
         expensesPageTableView.setMinWidth(350);
 
+        Label totalExpense = new Label("Total utgift: " + userBudget.getTotalExpense());
+
         Button removeExpenseButton = new Button ("Fjern markert utgift");
         removeExpenseButton.setMinWidth(800);
         removeExpenseButton.setOnAction(e -> {
@@ -508,6 +513,8 @@ class Scene2 extends Scene {
             expensesPageTableView.getItems().remove(selectedItem);
             expensesTableView.getItems().remove(selectedItem);
             userBudget.removeExpense(selectedItem.getBudgetItemName());
+            totalExpense.setText("Total utgift: " + userBudget.getTotalExpense());
+
             //UPDATING CHARTS
             updateBarChart(userBudget, barChart, series1);
             pieChartExpenses.set(FXCollections.observableArrayList());
@@ -524,7 +531,7 @@ class Scene2 extends Scene {
         VBox tableViewBox2 = new VBox();
         tableViewBox2.setPadding(new Insets(50, 0, 0, 0));
         tableViewBox2.setSpacing(10);
-        tableViewBox2.getChildren().addAll(expensesPageTableView, removeExpenseButton);
+        tableViewBox2.getChildren().addAll(expensesPageTableView, removeExpenseButton, totalExpense);
 
         BorderPane expensesWindowElements = new BorderPane();
         expensesWindowElements.getStyleClass().add("borderpane");
@@ -971,6 +978,7 @@ class Scene2 extends Scene {
             incomeTableView.setItems(incomeData.get());
             incomePageData.set(FXCollections.observableArrayList(userBudget.getIncomeList()));
             incomePageTableView.setItems(incomePageData.get());
+            totalIncome.setText("Total inntekt: " + userBudget.getTotalIncome());
 
 
             incomeSum.setText("");
@@ -986,6 +994,7 @@ class Scene2 extends Scene {
         addExpensesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 
             userBudget.addExpense(expensesName.getText(), Integer.parseInt(expensesSum.getText()));
+            totalExpense.setText("Total utgift: " + userBudget.getTotalExpense());
 
 
             //PIECHART UPDATE
