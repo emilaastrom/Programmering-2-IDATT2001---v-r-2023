@@ -762,8 +762,8 @@ class Scene2 extends Scene {
         TextField feedbackField = new TextField();
         feedbackField.setPrefHeight(150);
         feedbackField.setMaxWidth(600);
-        feedbackField.setPromptText("Har du forslag til utvidet funksjon av programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
-        Button feedbackButton = new Button("Send tilbakemelding (åpner e-postprogram)");
+        feedbackField.setPromptText("Har du spørsmål omkring hvordan du bruker programmet, eller har du funnet en bug? \r\rSkriv inn til oss her!");
+        Button feedbackButton = new Button("Send inn en melding til oss (åpner e-postprogram)");
         feedbackButton.setAlignment(Pos.CENTER);
         feedbackButton.setMinWidth(250);
         feedbackButton.autosize();
